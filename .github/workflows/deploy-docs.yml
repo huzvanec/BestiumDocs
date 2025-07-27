@@ -1,0 +1,47 @@
+name: Deploy documentation
+
+on:
+  push:
+    branches:
+      - prod
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/prod'
+    permissions:
+      contents: write
+    
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [ 20 ]
+    
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache-dependency-path: ./pnpm-lock.yaml
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build docs
+        run: pnpm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: './dist'
