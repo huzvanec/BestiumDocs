@@ -39,7 +39,7 @@ export default defineConfig({
                         {
                             label: 'Lifehacks', items: [
                                 { label: 'Introduction to Lifehacks', slug: 'code/lifehacks/introduction' },
-                                { label: 'Animal aging with BetterModel', slug: 'code/lifehacks/animal-aging' },
+                                { label: 'Mob aging with BetterModel', slug: 'code/lifehacks/mob-aging' },
                             ]
                         }
                     ]
