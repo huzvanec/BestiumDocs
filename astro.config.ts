@@ -1,8 +1,8 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import { plugin as constantsPlugin } from './src/util/remark/replace-constants'
-import { LATEST_BESTIUM, LATEST_USERDEV, BESTIUM_PAPER } from './src/util/versions';
+import { defineConfig } from 'astro/config';
+import { plugin as constantsPlugin } from './src/util/remark/replace-constants';
+import { BESTIUM_PAPER, LATEST_BESTIUM, LATEST_USERDEV } from './src/util/versions';
 
 // https://astro.build/config
 export default defineConfig({
