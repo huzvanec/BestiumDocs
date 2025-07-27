@@ -1,0 +1,54 @@
+---
+title: Animal aging with BetterModel
+description: Learn how to make custom animals created with Bestium age.
+---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+:::tip[More info]
+For more information about mob aging, see the [Minecraft Wiki](https://minecraft.wiki/w/Breeding#Spawning).
+:::
+
+## Mob aging in Minecraft
+
+In Minecraft, mob aging is controlled by an `int` variable called `age`, first introduced in the abstract class `AgeableMob` and inherited by classes like `AgeableWaterCreature`, `Animal`, and `AbstractVillager`.
+
+The `age` variable represents the number of ticks since the mob became an adult. Negative values mean the mob is a baby and is still growing up, while positive values mean the mob is an adult and is aging.  
+When mobs are bred, their `age` is usually set to `-24000` ticks (20 minutes to grow up), which can be accelerated by feeding them their breeding item.
+
+## The problem
+
+Mob stats like health and damage are managed by the server, but the size of the mob is handled by the client.  
+If you don't use BetterModel, the client will display the backing entity in its small (baby) variant. However, when using BetterModel, the mob's size will not change automatically—the mob will always appear the same size.
+
+## The solution
+
+You can manually handle the mob's size based on its age by overriding the `setAge` method:
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        override fun setAge(age: Int) {
+            super.setAge(age)
+            val scale = attributes.getInstance(Attributes.SCALE)!!
+            scale.baseValue = if (age < 0) 0.5 else 1.0
+        }
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        @Override
+        public void setAge(int age) {
+            super.setAge(age);
+            AttributeInstance scale = Objects.requireNonNull(
+                getAttributes().getInstance(Attributes.SCALE)
+            );
+            scale.setBaseValue(age < 0 ? 0.5 : 1.0);
+        }
+        ```
+    </TabItem>
+</Tabs>
+
+This approach overrides the `setAge` method of the `AgeableMob` class and sets the mob's scale attribute based on its age.  
+If the mob is a baby (`age < 0`), its scale is set to `0.5`; otherwise, it is set to `1.0`.  
+This way, your custom animals will visually grow up just like vanilla mobs, even when using BetterModel.

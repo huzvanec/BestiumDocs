@@ -1,0 +1,116 @@
+---
+title: Interacting with an entity
+description: Learn how to interact with spawned entities using the Bestium API.
+---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+:::tip[NMS → Bukkit]
+The methods below all require an `org.bukkit.entity.Entity` object, which is the Bukkit representation of an entity.  
+If you have an NMS entity, you can convert it to a Bukkit entity using `nmsEntity.getBukkitEntity()`.
+:::
+
+## Checking if an entity is an injected entity
+
+To check if an entity is an injected Bestium entity, use the `isInjectedEntity` method:
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        Bestium.isInjectedEntity(entity)
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        Bestium.isInjectedEntity(entity);
+        ```
+    </TabItem>
+</Tabs>
+
+## Getting the injected entity key
+
+To get the Bestium key of an injected entity, use the `getInjectedEntityKey` method.  
+This returns `null` if the entity is not an injected Bestium entity:
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        val key = Bestium.getInjectedEntityKey(entity)
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        Key key = Bestium.getInjectedEntityKey(entity);
+        ```
+    </TabItem>
+</Tabs>
+
+Alternatively, use the `requireInjectedEntityKey` method, which throws an exception if the entity is not an injected Bestium entity:
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        val key = Bestium.requireInjectedEntityKey(entity)
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        Key key = Bestium.requireInjectedEntityKey(entity);
+        ```
+    </TabItem>
+</Tabs>
+
+## Getting the [`EntityInjection`](/javadocs/cz/jeme/bestium/api/inject/EntityInjection.html) from a Bestium entity key
+
+You can retrieve the `EntityInjection` object using the entity key:
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        val injection = Bestium.getInjector().keyedInjections[key]!!
+        // Now you can access injection data, for example:
+        val isFriendlyMob = injection.mobCategory.isFriendly
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        EntityInjection injection = Objects.requireNonNull(Bestium.getInjector().getKeyedInjections().get(key));
+        // Now you can access injection data, for example:
+        boolean isFriendlyMob = injection.getMobCategory().isFriendly();
+        ```
+    </TabItem>
+</Tabs>
+
+## Getting the entity backing type
+
+To get the entity's backing type, you can either obtain the NMS object and call `getType`:
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        val nmsEntity = (entity as CraftEntity).handle
+        val backingType = nmsEntity.type
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
+        EntityType<?> backingType = nmsEntity.getType();
+        ```
+    </TabItem>
+</Tabs>
+
+Or, use the key obtained [above](#getting-the-injected-entity-key) to get the backing type:
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        val backingType = Bestium.getInjector().keyedTypes[key]!!
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        EntityType<?> backingType = Objects.requireNonNull(Bestium.getInjector().getKeyedTypes().get(key));
+        ```
+    </TabItem>
+</Tabs>
