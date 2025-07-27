@@ -5,16 +5,16 @@ description: Learn how to make custom animals created with Bestium age.
 
 import { TabItem, Tabs } from '@astrojs/starlight/components';
 
-:::tip[More info]
-For more information about mob aging, see the [Minecraft Wiki](https://minecraft.wiki/w/Breeding#Spawning).
-:::
-
 ## Mob aging in Minecraft
 
 In Minecraft, mob aging is controlled by an `int` variable called `age`, first introduced in the abstract class `AgeableMob` and inherited by classes like `AgeableWaterCreature`, `Animal`, and `AbstractVillager`.
 
 The `age` variable represents the number of ticks since the mob became an adult. Negative values mean the mob is a baby and is still growing up, while positive values mean the mob is an adult and is aging.  
 When mobs are bred, their `age` is usually set to `-24000` ticks (20 minutes to grow up), which can be accelerated by feeding them their breeding item.
+
+:::tip[More info]
+For more information about mob aging, see the [Minecraft Wiki](https://minecraft.wiki/w/Breeding#Spawning).
+:::
 
 ## The problem
 
