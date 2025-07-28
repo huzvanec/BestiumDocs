@@ -9,8 +9,6 @@ If you installed the [Bestium Example](https://github.com/huzvanec/BestiumExampl
 /summon bestium_example:capybara
 ```
 
-(❗ the command will appear red, tab completion is not supported.)
-
 A capybara should spawn on your server:
 
 ![Capybara](../../../assets/capybara-spawned.png)
