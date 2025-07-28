@@ -1,6 +1,29 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:base"
+  ],
+  "baseBranchPatterns": [
+    "^dev$"
+  ],
+  "useBaseBranchConfig": "merge",
+  "automerge": true,
+  "automergeType": "pr",
+  "dependencyDashboard": false,
+  "dependencyDashboardApproval": false,
+  "platformAutomerge": true,
+  "packageRules": [
+    {
+      "matchBaseBranches": [
+        "dev"
+      ],
+      "automerge": true
+    },
+    {
+      "matchBaseBranches": [
+        "prod"
+      ],
+      "enabled": false
+    }
   ]
 }
