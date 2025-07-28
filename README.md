@@ -30,21 +30,21 @@ Constants are dynamic strings (usually versions) that can be injected into code 
 
 Constants are defined in [astro.config.ts](./astro.config.ts).
 
-The remark plugin for constant replacement is located at [src/util/remark/replace-constants.ts.](./src/util/remark/replace-constants.ts).
+The remark plugin for constant replacement is located at [src/util/remark/replace-constants.ts](./src/util/remark/replace-constants.ts).
 
 ## Javadoc Links
 You can reference Bestium Javadoc in links using the following formats:
-- Type (Class, Interface, etc.)
+- **Type (class, interface, enum, etc.):**
     ```md
     [Injectable](jd::cz.jeme.bestium.api.inject.Injectable)
     ```
 
-- Package:
+- **Package:**
     ```md
     [entities](jd::cz.jeme.bestium.api.entity)
     ```
 
-- Method:
+- **Method:**
     ```md
     [Injectable#addBestiumAdditionalSaveData](jd::cz.jeme.bestium.api.inject.Injectable#addBestiumAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput output))
     ```
