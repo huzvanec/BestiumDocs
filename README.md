@@ -6,9 +6,25 @@ View the live site: [docs.bestium.jeme.cz](https://docs.bestium.jeme.cz)
 
 ---
 
-## Constants
+## Development
+Development happens in the `dev` branch, which is later merged into `prod`.
+Every push to `prod` triggers a [GitHub Actions workflow](https://github.com/huzvanec/BestiumDocs/blob/prod/.github/workflows/deploy-docs.yml) that builds and deploys the site to https://docs.bestium.jeme.cz.
 
-Constants are dynamic strings (usually versions) that can be injected into code blocks and inline code.
+### Requirements
+This project uses [pnpm](https://pnpm.io/).
+
+### Start Development Server
+```shell
+pnpm dev
+```
+
+### Build for Production
+```shell
+pnpm build
+```
+### Constants
+
+Constants are dynamic strings (usually versions) that get injected into code blocks and inline code.
 
 - **Inline usage:**  
   Inline code blocks automatically replace constants.  
@@ -32,7 +48,7 @@ Constants are defined in [astro.config.ts](./astro.config.ts).
 
 The remark plugin for constant replacement is located at [src/util/remark/replace-constants.ts](./src/util/remark/replace-constants.ts).
 
-## Javadoc Links
+### Javadoc Links
 You can reference Bestium Javadoc in links using the following formats:
 - **Type (class, interface, enum, etc.):**
     ```md
