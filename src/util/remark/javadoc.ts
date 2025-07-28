@@ -7,7 +7,6 @@ export const plugin: RemarkPlugin = (options) => {
         visit(tree, "link", (node) => {
             const match = node.url.match(/^jd::([^\s]+)$/);
             if (!match) return;
-            console.log(`Javadoc detected: ${node.url}`);
             const jd = match[1];
 
             const [classPath, method] = jd.split("#");
@@ -29,7 +28,6 @@ export const plugin: RemarkPlugin = (options) => {
                 const methodName = method ? `#${method}` : "";
                 node.url = `${LATEST_JAVADOC}/${packageName}/${className}.html${methodName}`
             }
-            console.log(`Javadoc transformed: ${node.url}`);
         })
     }
 }
