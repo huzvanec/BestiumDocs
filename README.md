@@ -30,7 +30,7 @@ Constants are dynamic strings (usually versions) that get injected into code blo
   Inline code blocks automatically replace constants.  
   Example:  
   ```md
-  Download the latest version of Bestium: `const::LATEST_BESTIUM`
+  Download the latest version of Bestium: `{const::LATEST_BESTIUM}`
   ```
 
 - **Code block usage:**  
@@ -39,7 +39,7 @@ Constants are dynamic strings (usually versions) that get injected into code blo
   ````md
   ```groovy replace
   plugins {
-      id 'io.papermc.paperweight.userdev' version 'const::LATEST_USERDEV'
+      id 'io.papermc.paperweight.userdev' version '{const::LATEST_USERDEV}'
   }
   ```
   ````

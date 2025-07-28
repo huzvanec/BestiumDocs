@@ -25,7 +25,7 @@ Your Gradle build configuration should look something like this:
             <TabItem label="Gradle Kotlin DSL">
                 ```kts title="build.gradle.kts" replace
                 plugins {
-                    id("io.papermc.paperweight.userdev") version "const::LATEST_USERDEV"
+                    id("io.papermc.paperweight.userdev") version "{const::LATEST_USERDEV}"
                 }
 
                 repositories {
@@ -33,8 +33,8 @@ Your Gradle build configuration should look something like this:
                 }
 
                 dependencies {
-                    compileOnly("cz.jeme:bestium:const::LATEST_BESTIUM")
-                    paperweight.paperDevBundle("const::BESTIUM_PAPER")
+                    compileOnly("cz.jeme:bestium:{const::LATEST_BESTIUM}")
+                    paperweight.paperDevBundle("{const::BESTIUM_PAPER}")
                 }
 
                 kotlin {
@@ -45,7 +45,7 @@ Your Gradle build configuration should look something like this:
             <TabItem label="Gradle Groovy DSL">
                 ```groovy title="build.gradle" replace
                 plugins {
-                    id 'io.papermc.paperweight.userdev' version 'const::LATEST_USERDEV'
+                    id 'io.papermc.paperweight.userdev' version '{const::LATEST_USERDEV}'
                 }
 
                 repositories {
@@ -53,8 +53,8 @@ Your Gradle build configuration should look something like this:
                 }
 
                 dependencies {
-                    compileOnly 'cz.jeme:bestium:const::LATEST_BESTIUM'
-                    paperweight.paperDevBundle('const::BESTIUM_PAPER')
+                    compileOnly 'cz.jeme:bestium:{const::LATEST_BESTIUM}'
+                    paperweight.paperDevBundle('{const::BESTIUM_PAPER}')
                 }
                 ```
             </TabItem>
@@ -65,7 +65,7 @@ Your Gradle build configuration should look something like this:
             <TabItem label="Gradle Kotlin DSL">
                 ```kts title="build.gradle.kts" replace
                 plugins {
-                    id("io.papermc.paperweight.userdev") version "const::LATEST_USERDEV"
+                    id("io.papermc.paperweight.userdev") version "{const::LATEST_USERDEV}"
                 }
 
                 repositories {
@@ -73,8 +73,8 @@ Your Gradle build configuration should look something like this:
                 }
 
                 dependencies {
-                    compileOnly("cz.jeme:bestium:const::LATEST_BESTIUM")
-                    paperweight.paperDevBundle("const::BESTIUM_PAPER")
+                    compileOnly("cz.jeme:bestium:{const::LATEST_BESTIUM}")
+                    paperweight.paperDevBundle("{const::BESTIUM_PAPER}")
                 }
 
                 java {
@@ -85,7 +85,7 @@ Your Gradle build configuration should look something like this:
             <TabItem label="Gradle Groovy DSL">
                 ```groovy title="build.gradle" replace
                 plugins {
-                    id 'io.papermc.paperweight.userdev' version 'const::LATEST_USERDEV'
+                    id 'io.papermc.paperweight.userdev' version '{const::LATEST_USERDEV}'
                 }
 
                 repositories {
@@ -93,8 +93,8 @@ Your Gradle build configuration should look something like this:
                 }
 
                 dependencies {
-                    compileOnly 'cz.jeme:bestium:const::LATEST_BESTIUM'
-                    paperweight.paperDevBundle('const::BESTIUM_PAPER')
+                    compileOnly 'cz.jeme:bestium:{const::LATEST_BESTIUM}'
+                    paperweight.paperDevBundle('{const::BESTIUM_PAPER}')
                 }
                 ```
             </TabItem>

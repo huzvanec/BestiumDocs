@@ -11,7 +11,7 @@ export const plugin: RemarkPlugin = ({ constants }: { constants: { [key: string]
 
             if (!node.value) return;
 
-            node.value = node.value.replace(/const::([^\s]+)/g, (_: string, name: string) => {
+            node.value = node.value.replace(/\{const::([^\s]+)\}/g, (_: string, name: string) => {
                 return constants[name] ?? name
             })
         });
