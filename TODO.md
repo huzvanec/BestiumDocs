@@ -6,7 +6,7 @@
 - [x] Mob aging
 - [x] Add javadoc replacement
 - [x] Add missing EntityInjection.Builder#setTypeCustomizer
-- [ ] Fix gradle build example to contain Java version
+- [x] Fix gradle build example to contain JDK version
 - [ ] Advancements
 - [ ] Mob variants
 - [ ] Mob gear
