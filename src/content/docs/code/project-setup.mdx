@@ -19,38 +19,86 @@ To use Bestium in your plugin project, you'll need two dependencies:
 - [Bestium API](https://central.sonatype.com/artifact/cz.jeme/bestium) — for using Bestium’s entity injection tools.
 
 Your Gradle build configuration should look something like this:
-<Tabs syncKey="buildLang">
-    <TabItem label="Gradle Kotlin DSL">
-        ```kts title="build.gradle.kts" replace
-        plugins {
-            id("io.papermc.paperweight.userdev") version "const::LATEST_USERDEV"
-        }
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        <Tabs syncKey="buildLang">
+            <TabItem label="Gradle Kotlin DSL">
+                ```kts title="build.gradle.kts" replace
+                plugins {
+                    id("io.papermc.paperweight.userdev") version "const::LATEST_USERDEV"
+                }
 
-        repositories {
-            mavenCentral()
-        }
+                repositories {
+                    mavenCentral()
+                }
 
-        dependencies {
-            compileOnly("cz.jeme:bestium:const::LATEST_BESTIUM")
-            paperweight.paperDevBundle("const::BESTIUM_PAPER")
-        }
-        ```
+                dependencies {
+                    compileOnly("cz.jeme:bestium:const::LATEST_BESTIUM")
+                    paperweight.paperDevBundle("const::BESTIUM_PAPER")
+                }
+
+                kotlin {
+                    jvmToolchain(21)
+                }
+                ```
+            </TabItem>
+            <TabItem label="Gradle Groovy DSL">
+                ```groovy title="build.gradle" replace
+                plugins {
+                    id 'io.papermc.paperweight.userdev' version 'const::LATEST_USERDEV'
+                }
+
+                repositories {
+                    mavenCentral()
+                }
+
+                dependencies {
+                    compileOnly 'cz.jeme:bestium:const::LATEST_BESTIUM'
+                    paperweight.paperDevBundle('const::BESTIUM_PAPER')
+                }
+                ```
+            </TabItem>
+        </Tabs>
     </TabItem>
-    <TabItem label="Gradle Groovy DSL">
-        ```groovy title="build.gradle" replace
-        plugins {
-            id 'io.papermc.paperweight.userdev' version 'const::LATEST_USERDEV'
-        }
+    <TabItem label="Java">
+        <Tabs syncKey="buildLang">
+            <TabItem label="Gradle Kotlin DSL">
+                ```kts title="build.gradle.kts" replace
+                plugins {
+                    id("io.papermc.paperweight.userdev") version "const::LATEST_USERDEV"
+                }
 
-        repositories {
-            mavenCentral()
-        }
+                repositories {
+                    mavenCentral()
+                }
 
-        dependencies {
-            compileOnly 'cz.jeme:bestium:const::LATEST_BESTIUM'
-            paperDevBundle 'const::BESTIUM_PAPER'
-        }
-        ```
+                dependencies {
+                    compileOnly("cz.jeme:bestium:const::LATEST_BESTIUM")
+                    paperweight.paperDevBundle("const::BESTIUM_PAPER")
+                }
+
+                java {
+                    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+                }
+                ```
+            </TabItem>
+            <TabItem label="Gradle Groovy DSL">
+                ```groovy title="build.gradle" replace
+                plugins {
+                    id 'io.papermc.paperweight.userdev' version 'const::LATEST_USERDEV'
+                }
+
+                repositories {
+                    mavenCentral()
+                }
+
+                dependencies {
+                    compileOnly 'cz.jeme:bestium:const::LATEST_BESTIUM'
+                    paperweight.paperDevBundle('const::BESTIUM_PAPER')
+                }
+                ```
+            </TabItem>
+        </Tabs>
     </TabItem>
 </Tabs>
 
