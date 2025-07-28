@@ -3,6 +3,9 @@
   "extends": [
     "config:recommended"
   ],
+  "baseBranchPatterns": [
+    "dev"
+  ],
   "automergeType": "branch",
   "packageRules": [
     {
