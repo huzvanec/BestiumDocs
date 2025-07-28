@@ -3,11 +3,7 @@
   "extends": [
     "config:recommended"
   ],
-  "baseBranchPatterns": [
-    "dev"
-  ],
-  "automerge": true,
-  "ignoreTests": true,
+  "automergeType": "branch",
   "packageRules": [
     {
       "matchBaseBranches": [
@@ -18,7 +14,9 @@
         "patch",
         "pin",
         "digest"
-      ]
+      ],
+      "automerge": true,
+      "ignoreTests": true
     }
   ]
 }
