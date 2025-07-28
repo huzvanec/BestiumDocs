@@ -44,3 +44,5 @@ async function fetchPaperVersion(): Promise<string> {
 }
 
 export const BESTIUM_PAPER: string = await fetchPaperVersion()
+
+export const LATEST_JAVADOC: string = `https://jd.bestium.jeme.cz/${LATEST_BESTIUM}`
