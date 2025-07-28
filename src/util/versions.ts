@@ -15,7 +15,7 @@ async function fetchGitHubVersions(owner: string, repo: string): Promise<Tag[]> 
     try {
         response = await fetch(`https://api.github.com/repos/${owner}/${repo}/tags`)
     } catch (e) {
-        response = {ok: false} as Response
+        response = { ok: false } as Response
     }
     return response.ok ? await response.json() : []
 }
@@ -35,7 +35,7 @@ async function fetchPaperVersion(): Promise<string> {
     try {
         response = await fetch(`https://raw.githubusercontent.com/huzvanec/Bestium/${treeSha}/gradle/libs.versions.toml`)
     } catch (e) {
-        response = {ok: false} as Response
+        response = { ok: false } as Response
     }
     const toml = await response.text()
     const match = toml.match(/^\s*paper\s*=\s*"([^"]+)"/m);
@@ -44,3 +44,5 @@ async function fetchPaperVersion(): Promise<string> {
 }
 
 export const BESTIUM_PAPER: string = await fetchPaperVersion()
+
+export const LATEST_JAVADOC: string = `https://jd.bestium.jeme.cz/${LATEST_BESTIUM}`

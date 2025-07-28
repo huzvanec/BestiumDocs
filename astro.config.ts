@@ -1,8 +1,9 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import { plugin as constantsPlugin } from './src/util/remark/replace-constants'
-import { LATEST_BESTIUM, LATEST_USERDEV, BESTIUM_PAPER } from './src/util/versions';
+import { defineConfig } from 'astro/config';
+import { plugin as constantsPlugin } from './src/util/remark/replace-constants';
+import { plugin as javadocPlugin } from './src/util/remark/javadoc';
+import { BESTIUM_PAPER, LATEST_BESTIUM, LATEST_USERDEV, LATEST_JAVADOC } from './src/util/versions';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,7 +12,7 @@ export default defineConfig({
             title: 'Bestium Docs',
             social: [
                 { icon: 'github', label: 'GitHub', href: 'https://github.com/huzvanec/Bestium' },
-                { icon: 'seti:java', label: 'Javadocs', href: 'javadocs/' }
+                { icon: 'seti:java', label: 'Javadocs', href: 'https://jd.bestium.jeme.cz' }
             ],
             favicon: '/favicon.ico',
             sidebar: [
@@ -55,9 +56,14 @@ export default defineConfig({
                     constants: {
                         LATEST_BESTIUM,
                         LATEST_USERDEV,
-                        BESTIUM_PAPER
+                        BESTIUM_PAPER,
+                        JAVADOCS: LATEST_JAVADOC
                     }
                 }
+            ],
+            [
+                javadocPlugin,
+                {}
             ]
         ]
     }
