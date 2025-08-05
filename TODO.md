@@ -1,18 +1,23 @@
-- [x] Add constants replacement 
+## Technical
+
+- [x] Constants replacement 
 - [x] Auto mc version in project setup
 - [x] Split docs from javadocs
+- [x] Javadoc replacement
+
+## Content
+
 - [x] Entity spawning
-- [x] Bestium key obtaining
+- [x] Entity interactions
 - [x] Mob aging
-- [x] Add javadoc replacement
-- [x] Add missing EntityInjection.Builder#setTypeCustomizer
-- [x] Fix gradle build example to contain JDK version
+- [x] Type customizers
+- [x] Mob variants
+- [x] Natural mob spawning in biomes 
+- [x] i18n (entity.my_plugin.capybara)
+- [ ] Config
 - [ ] Advancements
-- [ ] Mob variants
-- [ ] Mob gear
-- [ ] Mob gear w/ BetterModel
-- [ ] Interactions, inventories
 - [ ] Flying mobs
 - [ ] Hostile mobs
-- [ ] Replacing entity ids (entity.my_plugin.capybara)
-- [ ] Creating an entity instance (Injectable#bestiumRealType, EntityInjector#getTypes)
+- [ ] Mob gear
+- [ ] Mob gear w/ BetterModel?
+- [ ] Interactions, inventories
