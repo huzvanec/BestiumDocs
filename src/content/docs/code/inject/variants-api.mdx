@@ -14,11 +14,11 @@ It allows you to define multiple visual or functional variants for your custom e
 
 To create a new variant, use one of the static factory methods in the [`EntityVariant`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant) interface. Each method requires a variant ID (`[a-z0-9_-.]`) and a `.bbmodel` file as input:
 
-- [`fromModelUrl(String, URL)`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant#fromModelUrl(java.lang.String,java.net.URL))  
+##### [`fromModelUrl(String, URL)`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant#fromModelUrl(java.lang.String,java.net.URL))  
   Loads the model from a remote or local URL.
-- [`fromModelFile(String, File)`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant#fromModelFile(java.lang.String,java.io.File))  
+##### [`fromModelFile(String, File)`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant#fromModelFile(java.lang.String,java.io.File))  
   Loads the model from a file on disk.
-- [`fromModelResource(String, PluginBootstrap, String)`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant#fromModelResource(java.lang.String,io.papermc.paper.plugin.bootstrap.PluginBootstrap,java.lang.String))  
+##### [`fromModelResource(String, PluginBootstrap, String)`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant#fromModelResource(java.lang.String,io.papermc.paper.plugin.bootstrap.PluginBootstrap,java.lang.String))  
   Loads the model as a resource bundled inside your plugin JAR.
 
 :::tip[Which method should I use?]
@@ -41,28 +41,28 @@ To control which variant is selected when an entity spawns, you can define a [`V
 
 You can implement your own custom rule (using a lambda), but there is already a lot of builtin useful static methods:
 
-- [`first()`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#first())  
-  Always selects the first registered variant. This is the default behavior when no rule is set.
+##### [`first()`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#first())  
+Always selects the first registered variant. This is the default behavior when no rule is set.
   
-- [`always(String)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#always(java.lang.String))  
-  Always selects the specific variant by ID.
+##### [`always(String)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#always(java.lang.String))  
+Always selects the specific variant by ID.
 
-- [`random()`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#random())  
-  Picks a random variant from those registered.
+##### [`random()`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#random())  
+Picks a random variant from those registered.
 
-- [`weighted(Map<String, Integer>)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#weighted(java.util.Map))  
-  Selects a variant based on weighted chance. Pass a map where keys are variant IDs and values are integer weights. Higher weight = higher chance.
+##### [`weighted(Map<String, Integer>)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#weighted(java.util.Map))  
+Selects a variant based on weighted chance. Pass a map where keys are variant IDs and values are integer weights. Higher weight = higher chance.
 
-- [`ifBiome(BiomeFilter, String)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#ifBiome(cz.jeme.bestium.api.inject.biome.BiomeFilter,java.lang.String))  
-  Uses the specified variant only if the current biome passes the provided [`BiomeFilter`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter).  
-  For more on biome filters, see the [Biome API](../biome-api).
+##### [`ifBiome(BiomeFilter, String)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#ifBiome(cz.jeme.bestium.api.inject.biome.BiomeFilter,java.lang.String))  
+Uses the specified variant only if the current biome passes the provided [`BiomeFilter`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter).  
+For more on biome filters, see the [Biome API](../biome-api).
 
-- [`ifWorld(Key, String)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#ifWorld(net.kyori.adventure.key.Key,java.lang.String))  
-  Uses the variant only if the entity spawns in a world matching the given key.
+##### [`ifWorld(Key, String)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#ifWorld(net.kyori.adventure.key.Key,java.lang.String))  
+Uses the variant only if the entity spawns in a world matching the given key.
 
-- [`firstMatch(VariantRule...)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#firstMatch(cz.jeme.bestium.api.inject.variant.VariantRule...))  
-  Tries multiple variant rules in order and returns the first one that successfully picks a variant.  
-  This is useful for combining logic.
+##### [`firstMatch(VariantRule...)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#firstMatch(cz.jeme.bestium.api.inject.variant.VariantRule...))  
+Tries multiple variant rules in order and returns the first one that successfully picks a variant.  
+This is useful for combining logic.
 
 ## Example
 
@@ -87,8 +87,8 @@ Example `EntityInjection.Builder` variant configuration for our capybara may loo
         )
         .setVariantRule(
             VariantRule.firstMatch(
-                VariantRule.ifTemperature(
-                    BiomeTemperature.COLD,
+                VariantRule.ifBiome(
+                    BiomeFilter.tag(Key.key("minecraft:spawns_cold_variant_farm_animals")),
                     "blue"
                 ),
                 VariantRule.always("normal")
@@ -114,8 +114,8 @@ Example `EntityInjection.Builder` variant configuration for our capybara may loo
         )
         .setVariantRule(
             VariantRule.firstMatch(
-                VariantRule.ifTemperature(
-                    BiomeTemperature.COLD,
+                VariantRule.ifBiome(
+                    BiomeFilter.tag(Key.key("minecraft:spawns_cold_variant_farm_animals")),
                     "blue"
                 ),
                 VariantRule.always("normal")

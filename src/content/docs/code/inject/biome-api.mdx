@@ -2,3 +2,97 @@
 title: Biome API
 description: Learn how to make your entity spawn naturally in biomes.
 ---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The Biome API is a feature introduced in Bestium v3.0.0 and lives in the [`cz.jeme.bestium.api.inject.biome`](jd::cz.jeme.bestium.api.inject.biome) package.  
+It allows you to define in which biomes, how often and in what quantities should your creature naturally spawn.
+
+## Configuring biome selection
+
+To control in which biomes your entity may naturally spawn, you can define a [`SpawnRule`](jd::cz.jeme.bestium.api.inject.biome.SpawnRule).
+When the server starts, all registered biomes are passed into this function and the [`SpawnData`](jd::cz.jeme.bestium.api.inject.biome.SpawnData), definining
+how often and in what quantities should the mob spawned, is injected to the biome.
+
+You can implement your own custom rule (using a lambda), but there are already some builtin useful static methods:
+
+- [`never()`](jd::cz.jeme.bestium.api.inject.biome.SpawnRule#never())  
+  Doesn't spawn your entity in any biomes. This is the default behavior when no rule is set.
+
+- [`ifBiome(BiomeFilter, SpawnData)`](jd::cz.jeme.bestium.api.inject.biome.SpawnRule#ifBiome(cz.jeme.bestium.api.inject.biome.BiomeFilter,cz.jeme.bestium.api.inject.biome.BiomeFilter))  
+  Returns the provided `SpawnData` for biomes where the biome filter tests positive.
+
+- [`firstMatch(SpawnRule...)`](jd::cz.jeme.bestium.api.inject.biome.SpawnRule#firstMatch(cz.jeme.bestium.api.inject.biome.SpawnRule...))  
+  Tries multiple spawn rules in order and returns the first one that successfully returns `SpawnData`. This is useful for combining logic.
+
+You can set the spawn rule of an `EntityInjection.Builder` using [setSpawnRule(SpawnRule)](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#setSpawnRule(cz.jeme.bestium.api.inject.biome.SpawnRule)).
+
+## [`BiomeFilter`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter)s
+A `BiomeFilter` is a predicate that checks whether a given biome matches a certain condition. It returns `true` if the condition is met, and `false` otherwise.
+
+You can implement your own custom rule (using a lambda), but there are already some builtin static methods:
+
+### Logical operations
+
+##### [`and(BiomeFilter...)`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter#and(cz.jeme.bestium.api.inject.biome.BiomeFilter...))
+   All filters must pass.
+##### [`or(BiomeFilter...)`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter#or(cz.jeme.bestium.api.inject.biome.BiomeFilter...))
+  At least one filter must pass.
+##### [`not(BiomeFilter)`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter#not(cz.jeme.bestium.api.inject.biome.BiomeFilter))
+  Inverts the filter result.
+
+### Other useful methods
+
+##### [`baseTemperature(DoubleRange)`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter#baseTemperature(org.apache.commons.lang3.DoubleRange))
+Filters biomes based on their base temperature. Unlike normal temperature, base temperature is
+a static value defined in biome's definition.
+
+You can use [`BiomeTemperature`](jd::cz.bestium.api.util.BiomeTemperature) to access predefined ranges: `COLD`, `TEMPERATE`, `WARM`.
+
+##### [`tag(Key)`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter#tag(net.kyori.adventure.key.Key))
+Filters biomes by tag (for example `minecraft:is_savanna`). Tags group related biomes, for a full list,
+see [Minecraft Wiki - Biome tag](https://minecraft.wiki/w/Biome_tag_(Java_Edition)).
+
+##### [`key(Key)`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter#key(net.kyori.adventure.key.Key)) and `keys(...)`
+Filters by exact biome key (for example `minecraft:savanna_plateau`). For a full list of vanilla biome keys,
+see [Minecraft Wiki - Biome IDs](https://minecraft.wiki/w/Biome#Java_Edition).
+
+### Convenience Filters
+
+##### [`overworld()`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter#overworld())
+Matches biomes tagged with `minecraft:is_overworld`.
+##### [`nether()`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter#nether())
+Matches biomes tagged with `minecraft:is_nether`.
+##### [`end()`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter#end())
+Matches biomes tagged with `minecraft:is_end`.
+
+## Example
+
+Example `EntityInjection.Builder` spawn configuration for our capybara may look like this:
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        EntityInjection.builder(...)
+        ...
+        .setSpawnRule(
+            SpawnRule.ifBiome(
+                BiomeFilter.tag(Key.key("minecraft:is_river")),
+                SpawnData(3, 1, 4)
+            )
+        )
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        EntityInjection.builder(...)
+        ...
+        .setSpawnRule(
+            SpawnRule.ifBiome(
+                BiomeFilter.tag(Key.key("minecraft:is_river")),
+                new SpawnData(3, 1, 4)
+            )
+        )
+        ```
+    </TabItem>
+</Tabs>

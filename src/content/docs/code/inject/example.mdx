@@ -5,6 +5,8 @@ description: See how an example capybara injection may look like.
 
 import { TabItem, Tabs } from '@astrojs/starlight/components';
 
+This is an example of how a full entity injection of a Capybara entity may look like:
+
 <Tabs syncKey="lang">
     <TabItem label="Kotlin">
         ```kotlin title="MyPluginBootstrapper.kt"
@@ -34,8 +36,8 @@ import { TabItem, Tabs } from '@astrojs/starlight/components';
                 )
                 .setVariantRule(
                     VariantRule.firstMatch(
-                        VariantRule.ifTemperature(
-                            BiomeTemperature.COLD,
+                        VariantRule.ifBiome(
+                            BiomeFilter.tag(Key.key("minecraft:spawns_cold_variant_farm_animals")),
                             "blue"
                         ),
                         VariantRule.always("normal")
@@ -44,7 +46,7 @@ import { TabItem, Tabs } from '@astrojs/starlight/components';
                 .setSpawnRule(
                     SpawnRule.ifBiome(
                         BiomeFilter.tag(Key.key("minecraft:is_river")),
-                        SpawnData(1, 1, 4)
+                        SpawnData(3, 1, 4)
                     )
                 )
                 .setTypeCustomizer { builder ->
@@ -85,8 +87,8 @@ import { TabItem, Tabs } from '@astrojs/starlight/components';
                 )
                 .setVariantRule(
                     VariantRule.firstMatch(
-                        VariantRule.ifTemperature(
-                            BiomeTemperature.COLD,
+                        VariantRule.ifBiome(
+                            BiomeFilter.tag(Key.key("minecraft:spawns_cold_variant_farm_animals")),
                             "blue"
                         ),
                         VariantRule.always("normal")
@@ -95,7 +97,7 @@ import { TabItem, Tabs } from '@astrojs/starlight/components';
                 .setSpawnRule(
                     SpawnRule.ifBiome(
                         BiomeFilter.tag(Key.key("minecraft:is_river")),
-                        new SpawnData(1, 1, 4)
+                        new SpawnData(3, 1, 4)
                     )
                 )
                 .setTypeCustomizer(builder -> {

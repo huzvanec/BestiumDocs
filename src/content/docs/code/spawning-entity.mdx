@@ -5,7 +5,7 @@ description: Learn how to spawn injected entities with Bestium API.
 
 import { TabItem, Tabs } from '@astrojs/starlight/components';
 
-After you have [injected your entity](../injecting-entity), you will likely want to spawn it in the world.
+After you have injected your entity, you will likely want to spawn it in the world.
 You can use the `/summon` command (e.g. `/summon my_plugin:capybara`), but you may also want to do this programmatically using the Bestium API.
 
 To spawn an entity with the API, use:
@@ -24,7 +24,8 @@ To spawn an entity with the API, use:
 
 This method requires four parameters:
 
-1. `Location`: The position where the entity should be spawned.
+#### 1. `Location`
+The position where the entity should be spawned.
     <Tabs syncKey="lang">
         <TabItem label="Kotlin">
             ```kotlin
@@ -38,7 +39,8 @@ This method requires four parameters:
         </TabItem>
     </Tabs>
 
-2.  `Class`: The class of the injected entity you want to spawn.
+#### 2. `Class`
+The class of the injected entity you want to spawn.
     <Tabs syncKey="lang">
         <TabItem label="Kotlin">
             ```kotlin
@@ -52,7 +54,8 @@ This method requires four parameters:
         </TabItem>
     </Tabs>
 
-3. `EntitySpawnReason`: The (NMS) reason for spawning the entity, stored in the entity data.
+#### 3. `EntitySpawnReason`
+The (NMS) reason for spawning the entity, stored in the entity data.
     
     For example, when spawning via a command:
     <Tabs syncKey="lang">
@@ -68,7 +71,8 @@ This method requires four parameters:
         </TabItem>
     </Tabs>
 
-4. `CreatureSpawnEvent.SpawnReason`: The (Bukkit) spawn reason, used for Bukkit events.
+#### 4. `CreatureSpawnEvent.SpawnReason`
+The (Bukkit) spawn reason, used for Bukkit events.
     
     For example, when spawning via a command:
     <Tabs syncKey="lang">
@@ -83,8 +87,9 @@ This method requires four parameters:
             ```
         </TabItem>
     </Tabs>
-5. `Consumer` (optional): A function that allows you to modify the entity just before it is spawned.  
-   This is useful if you want to customize the entity, such as setting its name or properties, right after creation.
+#### 5. `Consumer` (optional)
+A function that allows you to modify the entity just before it is spawned.  
+   This is useful if you want to customize the entity, such as setting its name or other properties, right after creation.
 
     <Tabs syncKey="lang">
         <TabItem label="Kotlin">
@@ -96,7 +101,7 @@ This method requires four parameters:
                 val bukkitCapybara = capybara.bukkitEntity as CraftAnimals
 
                 bukkitCapybara.customName(Component.text("Ben the capybara"))
-                bukkitCapybara.isCustomNameVisible = true
+                bukkitCapybara.isCustomNameVisible = true // Make the name always visible
             }
             ```
         </TabItem>
@@ -109,7 +114,7 @@ This method requires four parameters:
                 CraftAnimals bukkitCapybara = (CraftAnimals) capybara.getBukkitEntity();
 
                 bukkitCapybara.customName(Component.text("Ben the capybara"));
-                bukkitCapybara.setCustomNameVisible(true);
+                bukkitCapybara.setCustomNameVisible(true); // Make the name always visible
             }
             ```
         </TabItem>
