@@ -11,6 +11,7 @@
 - [x] Entity interactions
 - [x] Mob aging
 - [x] Type customizers
+- [x] Internals and patching
 - [x] Mob variants
 - [x] Natural mob spawning in biomes 
 - [x] i18n (entity.my_plugin.capybara)
