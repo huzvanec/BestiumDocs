@@ -1,4 +1,126 @@
 ---
 title: Variants API
-description: Learn how add and configure variants of your entity.
+description: Learn how to add and configure variants for your entities.
 ---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The Variants API is a feature introduced in Bestium v3.0.0 and lives in the [`cz.jeme.bestium.api.inject.variant`](jd::cz.jeme.bestium.api.inject.variant) package.  
+It allows you to define multiple visual or functional variants for your custom entities (such as cold, temperate, warm), and configure the logic that determines which variant is used when the entity spawns.
+
+---
+
+## Creating entity variants
+
+To create a new variant, use one of the static factory methods in the [`EntityVariant`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant) interface. Each method requires a variant ID (`[a-z0-9_-.]`) and a `.bbmodel` file as input:
+
+- [`fromModelUrl(String, URL)`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant#fromModelUrl(java.lang.String,java.net.URL))  
+  Loads the model from a remote or local URL.
+- [`fromModelFile(String, File)`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant#fromModelFile(java.lang.String,java.io.File))  
+  Loads the model from a file on disk.
+- [`fromModelResource(String, PluginBootstrap, String)`](jd::cz.jeme.bestium.api.inject.variant.EntityVariant#fromModelResource(java.lang.String,io.papermc.paper.plugin.bootstrap.PluginBootstrap,java.lang.String))  
+  Loads the model as a resource bundled inside your plugin JAR.
+
+:::tip[Which method should I use?]
+`fromModelResource` is the most practical and commonly used method, it allows you to bundle the `.bbmodel` file in your plugin's jar.
+:::
+
+All of these methods return an [`UnboundEntityVariant`](jd::cz.jeme.bestium.api.inject.variant.UnboundEntityVariant), which is not yet tied to a specific entity.
+
+You can register the variant to an `EntityInjection.Builder` using:
+- [`addVariant(UnboundEntityVariant)`](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#addVariant(cz.jeme.bestium.api.inject.variant.UnboundEntityVariant))  
+  Adds a single variant.
+- `addVariants(...)`  
+  Adds multiple variants at once (overloaded versions exist).
+
+---
+
+## Configuring variant selection
+
+To control which variant is selected when an entity spawns, you can define a [`VariantRule`](jd::cz.jeme.bestium.api.inject.variant.VariantRule).
+
+You can implement your own custom rule (using a lambda), but there is already a lot of builtin useful static methods:
+
+- [`first()`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#first())  
+  Always selects the first registered variant. This is the default behavior when no rule is set.
+  
+- [`always(String)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#always(java.lang.String))  
+  Always selects the specific variant by ID.
+
+- [`random()`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#random())  
+  Picks a random variant from those registered.
+
+- [`weighted(Map<String, Integer>)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#weighted(java.util.Map))  
+  Selects a variant based on weighted chance. Pass a map where keys are variant IDs and values are integer weights. Higher weight = higher chance.
+
+- [`ifBiome(BiomeFilter, String)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#ifBiome(cz.jeme.bestium.api.inject.biome.BiomeFilter,java.lang.String))  
+  Uses the specified variant only if the current biome passes the provided [`BiomeFilter`](jd::cz.jeme.bestium.api.inject.biome.BiomeFilter).  
+  For more on biome filters, see the [Biome API](../biome-api).
+
+- [`ifWorld(Key, String)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#ifWorld(net.kyori.adventure.key.Key,java.lang.String))  
+  Uses the variant only if the entity spawns in a world matching the given key.
+
+- [`firstMatch(VariantRule...)`](jd::cz.jeme.bestium.api.inject.variant.VariantRule#firstMatch(cz.jeme.bestium.api.inject.variant.VariantRule...))  
+  Tries multiple variant rules in order and returns the first one that successfully picks a variant.  
+  This is useful for combining logic.
+
+## Example
+
+Example `EntityInjection.Builder` variant configuration for our capybara may look like this:
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        EntityInjection.builder(...)
+        ...
+        .addVariants(
+            EntityVariant.fromModelResource(
+                "normal",
+                this,
+                "models/capybara/normal.bbmodel"
+            ),
+            EntityVariant.fromModelResource(
+                "blue",
+                this,
+                "models/capybara/blue.bbmodel"
+            )
+        )
+        .setVariantRule(
+            VariantRule.firstMatch(
+                VariantRule.ifTemperature(
+                    BiomeTemperature.COLD,
+                    "blue"
+                ),
+                VariantRule.always("normal")
+            )
+        )
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        EntityInjection.builder(...)
+        ...
+        .addVariants(
+            EntityVariant.fromModelResource(
+                "normal",
+                this,
+                "models/capybara/normal.bbmodel"
+            ),
+            EntityVariant.fromModelResource(
+                "blue",
+                this,
+                "models/capybara/blue.bbmodel"
+            )
+        )
+        .setVariantRule(
+            VariantRule.firstMatch(
+                VariantRule.ifTemperature(
+                    BiomeTemperature.COLD,
+                    "blue"
+                ),
+                VariantRule.always("normal")
+            )
+        )
+        ```
+    </TabItem>
+</Tabs>
