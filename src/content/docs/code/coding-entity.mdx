@@ -9,27 +9,39 @@ In this section, we'll walk through creating a custom Capybara entity, just like
 [Bestium Example plugin](https://github.com/huzvanec/BestiumExample).
 
 :::caution[Heads up! It's all NMS here!]
-When coding custom entities with Bestium, you will not use *any* Bukkit or Paper API classes.
-**All your imports must come exclusively from the `net.minecraft` or `com.mojang` packages.**
+When coding custom entities with Bestium, you will almost never use Bukkit or Paper API classes.
+All your imports should come exclusively from the `net.minecraft` or `com.mojang` packages.
 
-Be careful, your IDE will suggest similarly named classes from Bukkit or Paper (for example, `org.bukkit.inventory.ItemStack` vs. `net.minecraft.world.item.ItemStack`).
+Be careful, your IDE will suggest similarly named classes from Bukkit or Paper (for example, `org.bukkit.inventory.ItemStack` vs. `net.minecraft.world.item.ItemStack`).  
 Make sure to choose the correct Minecraft internal class.
 :::
 
 ## Choose the right base class
 
-Bestium provides a set of abstract base classes in the [`cz.jeme.bestium.api.entity`](jd::cz.jeme.bestium.api.entity) package that simplify working with injectable entities.
+Minecraft has a deep and confusing entity class hierarchy, and picking the correct base class can be challenging.
 
-Pick the one that best fits your entity:
-- `CustomAnimal` — for passive creatures like cows or capybaras
-- `CustomMonster` — for hostile mobs like zombies or skeletons
+Unlike traditional approaches that force you to extend a concrete class and work around AI structures, 
+Bestium gives you full control. You can design your entity from scratch, *almost* like Mojang does internally.
 
-etc.
+:::note[*Almost* like Mojang internally?]
+The only major limitation is you cannot create and send any synched entity data via the network protocol.
+:::
 
-If you want to extend a concrete vanilla Minecraft class (like `Zombie`) or create something less conventional,
-consult [the Javadoc for the `Injectable` interface](jd::cz.jeme.bestium.api.inject.Injectable).
+The real power of Bestium lies in choice: you’re free to select the base class that best fits your entity’s behavior. The ideal way to determine this is to:
+- Decompile a similar vanilla entity and check which class it extends.
+- Open `net.minecraft.world.entity.Entity` in your IDE and explore the class hierarchy.
+
+Here are some frequently used abstract or base classes you might consider extending:
+- `Animal` for passive creatures like cows, axolotls or __capybaras__
+- `Monster` for hostile mobs like zombies or skeletons
+- `AbstractVillager` for villagers and their variants
+- `AbstractGolem` for golems like iron golems or snow golems
+- `AbstractFish` for fish entities like pufferfish or tadpoles
+- `AbstractSchoolingFish` for [schooling fish](https://en.wikipedia.org/wiki/Shoaling_and_schooling) like cod or salmon
+- `AgeableWaterCreature` for water creatues with baby forms like dolphins or squids
 
 ## Create the entity class
+
 Your class must
 - Extend the appropriate base class
 - Implement all abstract methods
@@ -42,21 +54,21 @@ Your initial code should look something like this:
         ```kotlin title="Capybara.kt"
         package com.example.myplugin
 
-        import cz.jeme.bestium.api.entity.CustomAnimal
         import net.minecraft.server.level.ServerLevel
         import net.minecraft.world.entity.AgeableMob
         import net.minecraft.world.entity.EntityType
+        import net.minecraft.world.entity.animal.Animal
         import net.minecraft.world.item.ItemStack
         import net.minecraft.world.level.Level
 
-        open class Capybara(entityType: EntityType<out Capybara>, level: Level) : CustomAnimal(entityType, level) {
-            override fun isFood(p0: ItemStack): Boolean {
+        class Capybara(entityType: EntityType<out Capybara>, level: Level) : Animal(entityType, level) {
+            override fun isFood(stack: ItemStack): Boolean {
                 TODO("Not yet implemented")
             }
 
             override fun getBreedOffspring(
-                p0: ServerLevel,
-                p1: AgeableMob
+                serverLevel: ServerLevel,
+                otherParent: AgeableMob
             ): AgeableMob? {
                 TODO("Not yet implemented")
             }
@@ -67,25 +79,25 @@ Your initial code should look something like this:
         ```java title="Capybara.java"
         package com.example.myplugin;
 
-        import cz.jeme.bestium.api.entity.CustomAnimal;
         import net.minecraft.server.level.ServerLevel;
         import net.minecraft.world.entity.AgeableMob;
         import net.minecraft.world.entity.EntityType;
+        import net.minecraft.world.entity.animal.Animal;
         import net.minecraft.world.item.ItemStack;
         import net.minecraft.world.level.Level;
 
-        public class Capybara extends CustomAnimal {
-            public Capybara(EntityType<? extends Capybara> entityType, Level level) {
+        public class Capybara extends Animal {
+            protected Capybara(final EntityType<? extends Capybara> entityType, final Level level) {
                 super(entityType, level);
             }
 
             @Override
-            public boolean isFood(ItemStack itemStack) {
+            public boolean isFood(final ItemStack stack) {
                 return false;
             }
 
             @Override
-            public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
+            public AgeableMob getBreedOffspring(final ServerLevel serverLevel, final AgeableMob otherParent) {
                 return null;
             }
         }
@@ -94,7 +106,7 @@ Your initial code should look something like this:
 </Tabs>
 
 ## Add default attributes
-Your custom entity needs a set of default attributes, like health, speed, or attack damage, to function properly in the game.
+If your entity extends `LivingEntity` it needs a set of default attributes, like health, speed, or attack damage, to function properly in the game.
 These are defined in a static method, typically named `createAttributes()`. Some attributes are required (like max health and movement speed),
 you will usually find out, because the server will crash 🙂.
 
@@ -192,7 +204,6 @@ Your finished class will look something like this:
         ```kotlin title="Capybara.kt"
         package com.example.myplugin
 
-        import cz.jeme.bestium.api.entity.CustomAnimal
         import net.minecraft.server.level.ServerLevel
         import net.minecraft.world.entity.AgeableMob
         import net.minecraft.world.entity.EntitySpawnReason
@@ -200,12 +211,13 @@ Your finished class will look something like this:
         import net.minecraft.world.entity.ai.attributes.AttributeSupplier
         import net.minecraft.world.entity.ai.attributes.Attributes
         import net.minecraft.world.entity.ai.goal.*
+        import net.minecraft.world.entity.animal.Animal
         import net.minecraft.world.entity.player.Player
         import net.minecraft.world.item.ItemStack
         import net.minecraft.world.item.Items
         import net.minecraft.world.level.Level
 
-        open class Capybara(entityType: EntityType<out Capybara>, level: Level) : CustomAnimal(entityType, level) {
+        open class Capybara(entityType: EntityType<out Capybara>, level: Level) : Animal(entityType, level) {
             companion object {
                 fun createAttributes(): AttributeSupplier.Builder {
                     return createAnimalAttributes()
@@ -229,7 +241,7 @@ Your finished class will look something like this:
             }
 
             override fun getBreedOffspring(level: ServerLevel, otherParent: AgeableMob): AgeableMob? {
-                return bestiumRealType.create(level, EntitySpawnReason.BREEDING) as Capybara?
+                return type.create(level, EntitySpawnReason.BREEDING) as Capybara?
             }
         }
         ```
@@ -238,7 +250,6 @@ Your finished class will look something like this:
         ```java title="Capybara.java"
         package com.example.myplugin;
 
-        import cz.jeme.bestium.api.entity.CustomAnimal;
         import net.minecraft.server.level.ServerLevel;
         import net.minecraft.world.entity.AgeableMob;
         import net.minecraft.world.entity.EntitySpawnReason;
@@ -246,13 +257,14 @@ Your finished class will look something like this:
         import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
         import net.minecraft.world.entity.ai.attributes.Attributes;
         import net.minecraft.world.entity.ai.goal.*;
+        import net.minecraft.world.entity.animal.Animal;
         import net.minecraft.world.entity.player.Player;
         import net.minecraft.world.item.Item;
         import net.minecraft.world.item.ItemStack;
         import net.minecraft.world.item.Items;
         import net.minecraft.world.level.Level;
 
-        public class Capybara extends CustomAnimal {
+        public class Capybara extends Animal {
             public static AttributeSupplier.Builder createAttributes() {
                 return createAnimalAttributes()
                         .add(Attributes.MAX_HEALTH, 10)
@@ -281,7 +293,7 @@ Your finished class will look something like this:
 
             @Override
             public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
-                return (Capybara) getBestiumRealType().create(level, EntitySpawnReason.BREEDING);
+                return (Capybara) getType().create(level, EntitySpawnReason.BREEDING);
             }
         }
         ```

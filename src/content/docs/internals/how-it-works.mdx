@@ -1,0 +1,30 @@
+---
+title: How it works
+description: Learn how Bestium works internally.
+---
+
+The core concept behind Bestium is disguising a custom entity as a vanilla entity. While the server can be patched to add custom entities, the same cannot be done on the client side, since this is a serverside plugin. Instead Bestium intercepts outgoing packets and replaces the entity type with a vanilla "backing entity" just before they are sent to the client. This ensures the client receives a valid entity type and prevents disconnections due to unknown entities.
+
+Choosing the correct backing entity is important. For example, if you use a boat as the backing entity for a monster, the server will treat it as a monster, but the client will see a boat attacking them leading to exceptions thrown on the client and disconnecting. The backing entity must closely match the custom entity.
+
+## Model Integration
+
+Model rendering is handled entirely by [BetterModel](https://github.com/toxicity188/BetterModel). Bestium integrates with BetterModel and hides the backing entities using packet manipulation when enabled. BetterModel achieves custom entity models by sending item display entities to the client, which are then retextured via a resource pack to resemble bones modeled in [BlockBench](https://www.blockbench.net/). BetterModel handles animation and optimization on the client side. For more details, see the [BetterModel GitHub](https://github.com/toxicity188/BetterModel).  
+Go send love to [toxicity188](https://github.com/toxicity188) for their amazing work on the library.
+
+## Lifecycle
+
+Bestium's lifecycle is divided into several phases:
+
+1. **Patching**  
+   During this phase, Bestium modifies the bytecode of several Minecraft classes to inject its functionality. Most importantly the `ClientboundAddEntityPacket` constructor. If an injected `EntityType` is detected, it is replaced with the appropriate backing entity type before being sent to the client. This ensures the client always receives a valid entity type and avoids disconnects.  
+   For more details, see [the patching system](../patching-system).
+
+2. **Bootstrap (Minecraft) Injection**  
+   This phase runs as the first task during initial datapack loading. It injects custom entities into the NMS registries, sets up data fixers, default attributes, and creates the real entity type.
+
+3. **Biome Injection**  
+   Runs early in the load injection phase, injecting entity spawning data into registered biomes.
+
+4. **Load (Bukkit) Injection**  
+   Runs right after the biome injection phase. This phase more complex than others, it injects the entity type into the Bukkit registry, pointing it to the Bukkit entity type. The existing Bukkit backing entity type is then modified via reflection: its convert function is replaced with one that returns the injected entity when appropriate. This allows a single Bukkit entity type to convert multiple custom entities and the original vanilla entity it resembles.

@@ -9,14 +9,11 @@ To use Bestium, you need to start with a working [Paper plugin setup](https://do
 Your build must use either **Gradle Kotlin DSL** or **Gradle Groovy DSL**. Maven cannot be used, because paperweight-userdev
 does not support Maven.
 
-You can write your plugin code in either **Java** or **Kotlin**. Kotlin is recommended for its expressiveness,
-but fully optional.
-
 ## Add dependencies
 
 To use Bestium in your plugin project, you'll need two dependencies:
-- [paperweight-userdev](https://docs.papermc.io/paper/dev/userdev/) — for access to Minecraft internals (NMS).
-- [Bestium API](https://central.sonatype.com/artifact/cz.jeme/bestium) — for using Bestium’s entity injection tools.
+- [paperweight-userdev](https://docs.papermc.io/paper/dev/userdev/) for access to Minecraft internals (also known as NMS).
+- [Bestium API](https://central.sonatype.com/artifact/cz.jeme/bestium) for using Bestium’s entity injection tools.
 
 Your Gradle build configuration should look something like this:
 <Tabs syncKey="lang">
@@ -132,26 +129,9 @@ which let you run code early in the server initialization process.
 
 Follow [this guide](https://docs.papermc.io/paper/dev/getting-started/paper-plugins/) to migrate from Bukkit to Paper plugin format.
 
-## Depending on Bestium
-
-To access Bestium's API, you need to add it as a plugin dependency.
-This can be achieved by adding the following lines to your `paper-plugin.yml`:
-
-```yml title="paper-plugin.yml"
-dependencies:
-  bootstrap:
-    Bestium:
-      load: BEFORE
-      required: true
-      join-classpath: true
-  server:
-    Bestium:
-      join-classpath: true
-```
-
 ## Creating a Bootstrapper
 Bootstrappers allow you to run code very early in the Minecraft server's startup sequence.
-This is essential for registering custom entities with Bestium before datapacks (and biomes) are loaded.
+This is essential for registering custom entities with Bestium.
 
 To use a bootstrapper:
 1. Implement the `PluginBootstrap` interface:
@@ -188,7 +168,24 @@ To use a bootstrapper:
             ```
         </TabItem>
     </Tabs>
-2. Register your class:
+2. Register your bootstrapper class in `paper-plugin.yml`:
     ```yml title="paper-plugin.yml"
    bootstrapper: com.example.myplugin.MyPluginBootstrapper
    ```
+
+## Adding Bestium plugin dependency
+
+To access Bestium's API during runtime, you need to add it as a plugin dependency.
+This can be achieved by adding the following lines to your `paper-plugin.yml`:
+
+```yml title="paper-plugin.yml"
+dependencies:
+  bootstrap:
+    Bestium:
+      load: BEFORE
+      required: true
+      join-classpath: true
+  server:
+    Bestium:
+      join-classpath: true
+```

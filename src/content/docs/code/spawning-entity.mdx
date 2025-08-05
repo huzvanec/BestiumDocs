@@ -12,19 +12,19 @@ To spawn an entity with the API, use:
 <Tabs syncKey="lang">
     <TabItem label="Kotlin">
         ```kotlin
-        Bestium.spawn(Location, Class, EntitySpawnReason, CreatureSpawnEvent.SpawnReason, [Consumer])
+        Bestium.getEntityManager().spawn(Location, Class, EntitySpawnReason, CreatureSpawnEvent.SpawnReason, [Consumer])
         ```
     </TabItem>
     <TabItem label="Java">
         ```java
-        Bestium.spawn(Location, Class, EntitySpawnReason, CreatureSpawnEvent.SpawnReason, [Consumer]);
+        Bestium.getEntityManager().spawn(Location, Class, EntitySpawnReason, CreatureSpawnEvent.SpawnReason, [Consumer]);
         ```
     </TabItem>
 </Tabs>
 
 This method requires four parameters:
 
-1. **Location** – The position where the entity should be spawned.
+1. `Location`: The position where the entity should be spawned.
     <Tabs syncKey="lang">
         <TabItem label="Kotlin">
             ```kotlin
@@ -38,7 +38,7 @@ This method requires four parameters:
         </TabItem>
     </Tabs>
 
-2. **Class** – The class of the injected entity you want to spawn.
+2.  `Class`: The class of the injected entity you want to spawn.
     <Tabs syncKey="lang">
         <TabItem label="Kotlin">
             ```kotlin
@@ -52,7 +52,7 @@ This method requires four parameters:
         </TabItem>
     </Tabs>
 
-3. **EntitySpawnReason** – The (NMS) reason for spawning the entity, stored in the entity data.
+3. `EntitySpawnReason`: The (NMS) reason for spawning the entity, stored in the entity data.
     
     For example, when spawning via a command:
     <Tabs syncKey="lang">
@@ -68,7 +68,7 @@ This method requires four parameters:
         </TabItem>
     </Tabs>
 
-4. **CreatureSpawnEvent.SpawnReason** – The (Bukkit) spawn reason, used for Bukkit events.
+4. `CreatureSpawnEvent.SpawnReason`: The (Bukkit) spawn reason, used for Bukkit events.
     
     For example, when spawning via a command:
     <Tabs syncKey="lang">
@@ -83,7 +83,7 @@ This method requires four parameters:
             ```
         </TabItem>
     </Tabs>
-5. **Consumer** (optional) – A function that allows you to modify the entity just before it is spawned.  
+5. `Consumer` (optional): A function that allows you to modify the entity just before it is spawned.  
    This is useful if you want to customize the entity, such as setting its name or properties, right after creation.
 
     <Tabs syncKey="lang">

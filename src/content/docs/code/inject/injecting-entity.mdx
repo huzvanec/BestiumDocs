@@ -1,0 +1,262 @@
+---
+title: Injecting an entity
+description: Learn how to inject an entity with Bestium API.
+---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+After completing the [project setup](../project-setup), [creating a bootstrapper](../project-setup#creating-a-bootstrapper)
+and [writing your entity class](../coding-entity), you're ready to register your entity injection in your bootstrapper's `bootstrap()` function.
+This is done using:
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        Bestium.getInjector().register(Supplier<EntityInjection>)
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        Bestium.getInjector().register(Supplier<EntityInjection>);
+        ```
+    </TabItem>
+</Tabs>
+
+The `Supplier` provides an `EntityInjection` instance. Since this registration happens very early in server startup (before Bukkit or CraftBukkit are initialized)
+you can't create the `EntityInjection` immediately. The `Supplier` is only resolved once the internals are ready.
+
+## [`EntityInjection`](jd::cz.jeme.bestium.api.inject.EntityInjection) interface
+
+An `EntityInjection` is created using:
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        EntityInjection.builder(...).build()
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        EntityInjection.builder(...).build();
+        ```
+    </TabItem>
+</Tabs>
+
+### Required builder arguments
+
+You must provide five required parameters:
+#### 1. `Key`
+A unique entity key, use your plugin namespace and a unique entity name:
+    <Tabs syncKey="lang">
+        <TabItem label="Kotlin">
+            ```kotlin
+            Key.key("my_plugin", "capybara")
+            ```
+        </TabItem>
+        <TabItem label="Java">
+            ```java
+            Key.key("my_plugin", "capybara")
+            ```
+        </TabItem>
+    </Tabs>
+#### 2. `Class`
+The entity class you've created:
+    <Tabs syncKey="lang">
+        <TabItem label="Kotlin">
+            ```kotlin
+            Capybara::class.java
+            ```
+        </TabItem>
+        <TabItem label="Java">
+            ```java
+            Capybara.class
+            ```
+        </TabItem>
+    </Tabs>
+#### 3. `EntityType.EntityFactory`
+A factory constructing the entity from an `EntityType` and a `Level`, usually the constructor reference of your entity:
+    <Tabs syncKey="lang">
+        <TabItem label="Kotlin">
+            ```kotlin
+            ::Capybara
+            ```
+        </TabItem>
+        <TabItem label="Java">
+            ```java
+            Capybara::new
+            ```
+        </TabItem>
+    </Tabs>
+#### 4. [`ConvertFunction`](jd::cz.jeme.bestium.api.inject.ConvertFunction)
+A function that converts our NMS entity into a Bukkit type. This is usually the constructor of a CraftBukkkit entity wrapper class and depends on the base abstract class you extended:
+    | Base Bestium class | CraftBukkit wrapper class |
+    |---|---|
+    | `AbstractFish` | `CraftFish` |
+    | `AbstractGolem` | `CraftGolem` |
+    | `AbstractSchoolingFish` | `PaperSchoolableFish` |
+    | `AbstractVillager` | `CraftAbstractVillager` |
+    | `AgeableMob` | `CraftAgeable` |
+    | `AgeableWaterCreature` | missing, use `CraftAgeable` |
+    | `AmbientCreature` | `CraftAmbient` |
+    | `Animal` | `CraftAnimals` |
+    | `Entity` | `CraftEntity` |
+    | `LivingEntity` | `CraftLivingEntity` |
+    | `Mob` | `CraftMob` |
+    | `Monster` | `CraftMonster` |
+    | `PathfinderMob` | `CraftCreature` |
+    | `ShoulderRidingEntity` | missing, use `CraftTameableAnimal` |
+    | `TamableAnimal` | `CraftTameableAnimal` |
+    | `WaterAnimal` | `CraftWaterMob` |
+
+    Our capybara extends `Animal`, so we reference the constructor of `CraftAnimals`:
+    <Tabs syncKey="lang">
+        <TabItem label="Kotlin">
+            ```kotlin
+            ::CraftAnimals
+            ```
+        </TabItem>
+        <TabItem label="Java">
+            ```java
+            CraftAnimals::new
+            ```
+        </TabItem>
+    </Tabs>
+
+#### 5. `EntityType`
+A backing entity type. This is a very important parameter, before you choose you may want to read a little about [how Bestium works internally](../../internals/how-it-works).
+
+Bestium uses backing type as the "disguise for your entity" that is actually sent to the client over the network protocol. If you choose an incompatible (too distant) backing type, it can lead to the client throwing a "Network Protocol Error" and disconnecting.
+
+For example, if your entity directly extends `Animal` a good backing type might be `EntityType.PIG` or `EntityType.COW`.
+
+You **must never** mix living and non-living entities. If you select a non-living backing entity type for your living entity (or vice versa), disconnect issues are pretty much guaranteed.
+
+### Additional builder configuration
+Once you’ve provided the required parameters, you can continue chaining configuration methods to further customize your entity.
+For the full list of options, see the [EntityInjection.Builder Javadoc](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder).  
+Below is a selection of the most important configuration methods you’ll likely want to use:
+
+#### [`setDefaultAttributes(AttributeSupplier.Builder)`](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#setDefaultAttributes(net.minecraft.world.entity.ai.attributes.AttributeSupplier))
+**You must call this for living entities!**
+
+Defines the default entity attributes, you should call the static attributes method [created earlier](../coding-entity#add-default-attributes).
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        .setDefaultAttributes(Capybara.createDefaultAttributes())
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        .setDefaultAttributes(Capybara.createDefaultAttributes())
+        ```
+    </TabItem>
+</Tabs>
+> Defaults to: no default attributes
+
+#### [`setMobCategory(MobCategory)`](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#setMobCategory(net.minecraft.world.entity.MobCategory))
+Sets the category this mob belongs to, this defines whether the mob is friendly or hostile, how many instances there can be per chunk, whether it persists in world or how far from the player it despawns.
+| Mob category | Description | Max per chunk | Friendly | Persistent | Despawn distance |
+| ------------ | ----------- | ----------------------- | ----------- | ------------- | ---------------- | 
+| MONSTER | monsters like Zombies or Skeletons | 70    | false       | false         | 128 |
+| CREATURE | friendly mobs like Sheep or Villagers | 10 | true       | true          | 128 |
+| AMBIENT | ambient surface creatures like Bats | 15   | true        | false         | 128 |
+| AXOLOTLS | axolotls        | 5                       | true        | false         | 128 |
+| WATER_CREATURE | friendly water mobs like Dolphins and Squids | 5 | true | false   | 128 |
+| UNDERGROUND_WATER_CREATURE | friendly water mobs underground like Glow Squids | 5 | true | false | 128 |
+| WATER_AMBIENT | ambient water creatures like Cods and Salmon | 20 | true | false | 64 |
+| MISC | entities that don't naturally spawn like Boats, TNT or Projectiles | - | true | true | 128 |
+
+Our capybara is a friendly mob, so we use `CREATURE`:
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        .setMobCategory(MobCategory.CREATURE)
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        .setMobCategory(MobCategory.CREATURE)
+        ```
+    </TabItem>
+</Tabs>
+> Defaults to: `MobCategory.MISC`
+
+#### [`setDisplayName(Locale, Component)`](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#setDisplayName(java.util.Locale,net.kyori.adventure.text.Component))
+Sets the display name for this entity for the provided locale.
+
+:::caution[Use full country locales, not just languages!]
+For localization to work properly, you must use a full `Locale` with both language and country:
+| Wrong | Correct |
+| --- | --- |
+| ❌ `Locale.ENGLISH` | ✅ `Locale.US` |
+| ❌ `Locale.GERMAN` | ✅ `Locale.GERMANY` |
+| ❌ `Locale.of("cs")` | ✅ `Locale.of("cs", "CZ")` |
+:::
+
+For example, here's how you might define localized names for a capybara:
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        .setDisplayName(Locale.US, Component.text("Capybara"))
+        .setDisplayName(Locale.FRANCE, Component.text("Capybara"))
+        .setDisplayName(Locale.GERMANY, Component.text("Wasserschwein"))
+        .setDisplayName(Locale.ITALY, Component.text("Capibara"))
+        .setDisplayName(Locale.JAPAN, Component.text("カピバラ"))
+        .setDisplayName(Locale.KOREA, Component.text("카피바라"))
+        .setDisplayName(Locale.CHINA, Component.text("水豚"))
+        .setDisplayName(Locale.of("cs", "CZ"), Component.text("Kapybara"))
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        .setDisplayName(Locale.US, Component.text("Capybara"))
+        .setDisplayName(Locale.FRANCE, Component.text("Capybara"))
+        .setDisplayName(Locale.GERMANY, Component.text("Wasserschwein"))
+        .setDisplayName(Locale.ITALY, Component.text("Capibara"))
+        .setDisplayName(Locale.JAPAN, Component.text("カピバラ"))
+        .setDisplayName(Locale.KOREA, Component.text("카피바라"))
+        .setDisplayName(Locale.CHINA, Component.text("水豚"))
+        .setDisplayName(Locale.of("cs", "CZ"), Component.text("Kapybara"))
+        ```
+    </TabItem>
+</Tabs>
+
+You can also set multiple display names at once using
+[`setDisplayNames(Map<Locale, Component>)`](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#setDisplayNames(java.util.Map)).
+
+If you don’t care about localization, you can use the shorthand
+[`setDisplayName(Component)`](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#setDisplayName(net.kyori.adventure.text.Component)) which sets the name for the default `Locale.US`.
+
+If no display name is set, the entity will appear using its translation key
+(e.g., `entity.my_plugin.capybara`) in most places.
+
+#### [`setTypeCustomizer(Consumer<EntityType.Builder>)`](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#setTypeCustomizer(java.util.function.Consumer))
+Sets a type customizer for the entity type being created. This allows you to modify the underlying `EntityType.Builder` before it is built and registered for injection.
+
+You can use this to customize properties like whether the entity can be summoned with `/summon`, whether it's fire immune, and more:
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin
+        .setTypeCustomizer { builder ->
+            builder.noSummon()
+            builder.fireImmune()
+        }
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        .setTypeCustomizer(builder -> {
+            builder.noSummon();
+            builder.fireImmune();
+        })
+        ```
+    </TabItem>
+</Tabs>
+> Defaults to: no customizer
+
+
+#### [Variants API](../variants-api)
+Additional configuration related to entity variants is available, but it is documented separately on the [Variants API](../variants-api) page.
+
+#### [Biome API](../biome-api)
+If you want to configure natural biome spawning for your entities, refer to the dedicated [Biome API](../biome-api) documentation.

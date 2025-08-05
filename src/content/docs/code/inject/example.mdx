@@ -1,0 +1,110 @@
+---
+title: Capybara injection example
+description: See how an example capybara injection may look like.
+---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+<Tabs syncKey="lang">
+    <TabItem label="Kotlin">
+        ```kotlin title="MyPluginBootstrapper.kt"
+        override fun bootstrap(context: BootstrapContext) {
+            Bestium.getInjector().register {
+                EntityInjection.builder(
+                    Key.key("my_plugin", "capybara"),
+                    Capybara::class.java,
+                    ::Capybara,
+                    ::CraftAnimals,
+                    EntityType.PIG
+                )
+                .setDisplayName(Component.text("Capybara"))
+                .setDefaultAttributes(Capybara.createDefaultAttributes())
+                .setMobCategory(MobCategory.CREATURE)
+                .addVariants(
+                    EntityVariant.fromModelResource(
+                        "normal",
+                        this,
+                        "models/capybara/normal.bbmodel"
+                    ),
+                    EntityVariant.fromModelResource(
+                        "blue",
+                        this,
+                        "models/capybara/blue.bbmodel"
+                    )
+                )
+                .setVariantRule(
+                    VariantRule.firstMatch(
+                        VariantRule.ifTemperature(
+                            BiomeTemperature.COLD,
+                            "blue"
+                        ),
+                        VariantRule.always("normal")
+                    )
+                )
+                .setSpawnRule(
+                    SpawnRule.ifBiome(
+                        BiomeFilter.tag(Key.key("minecraft:is_river")),
+                        SpawnData(1, 1, 4)
+                    )
+                )
+                .setTypeCustomizer { builder ->
+                    // Capybaras are, of course, naturally fire immune
+                    builder.fireImmune()
+                }
+                .build()
+            }
+        }
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java title="MyPluginBootstrapper.java"
+        @Override
+        public void bootstrap(BootstrapContext context) {
+            Bestium.getInjector().register(() -> 
+                EntityInjection.builder(
+                    Key.key("my_plugin", "capybara"),
+                    Capybara.class,
+                    Capybara::new,
+                    CraftAnimals::new,
+                    EntityType.PIG
+                )
+                .setDisplayName(Component.text("Capybara"))
+                .setDefaultAttributes(Capybara.createDefaultAttributes())
+                .setMobCategory(MobCategory.CREATURE)
+                .addVariants(
+                    EntityVariant.fromModelResource(
+                        "normal",
+                        this,
+                        "models/capybara/normal.bbmodel"
+                    ),
+                    EntityVariant.fromModelResource(
+                        "blue",
+                        this,
+                        "models/capybara/blue.bbmodel"
+                    )
+                )
+                .setVariantRule(
+                    VariantRule.firstMatch(
+                        VariantRule.ifTemperature(
+                            BiomeTemperature.COLD,
+                            "blue"
+                        ),
+                        VariantRule.always("normal")
+                    )
+                )
+                .setSpawnRule(
+                    SpawnRule.ifBiome(
+                        BiomeFilter.tag(Key.key("minecraft:is_river")),
+                        new SpawnData(1, 1, 4)
+                    )
+                )
+                .setTypeCustomizer(builder -> {
+                    // Capybaras are, of course, naturally fire immune
+                    builder.fireImmune();
+                })
+                .build()
+            );
+        }
+        ```
+    </TabItem>
+</Tabs>

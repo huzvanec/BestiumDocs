@@ -1,0 +1,23 @@
+---
+title: Introduction to Bestium API
+description: Learn how your code can interact with Bestium.
+---
+
+The Bestium project is split into two parts:
+
+- **Core:** Written in Kotlin, handles entity injection and other internal logic.
+- **API:** Written in Java, provides the interface for your code to interact with Bestium.
+
+The API is written in Java to ensure compatibility with both Java and Kotlin projects.
+
+:::note[Breaking changes]
+Breaking changes generally only occur in major releases (`X.0.0`). However, minor releases (`X.Y.0`) may introduce breaking changes in the following cases:
+
+- **Minecraft or Paper updates:**  
+  If Minecraft or Paper introduce changes that require breaking adjustments, these may appear in a minor release. Significant breakage will result in a major version bump.
+
+- **Internal APIs:**  
+  Any API element marked with `@ApiStatus.Internal` is not intended for public use and may change or be removed at any time.
+
+All breaking changes will always be fully documented in the release notes.
+:::
