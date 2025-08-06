@@ -89,33 +89,14 @@ The (Bukkit) spawn reason, used for Bukkit events.
     </Tabs>
 #### 5. `Consumer` (optional)
 A function that allows you to modify the entity just before it is spawned.  
-   This is useful if you want to customize the entity, such as setting its name or other properties, right after creation.
+   This is useful if you want to customize the entity, right after creation.
 
-    <Tabs syncKey="lang">
-        <TabItem label="Kotlin">
-            ```kotlin
-            { capybara ->
-                // You can access the Bukkit representation and use the Bukkit API here.
-                // Capybara can be safely cast to CraftAnimals because ::CraftAnimals
-                // was specified as the convert function during injection registration.
-                val bukkitCapybara = capybara.bukkitEntity as CraftAnimals
+:::caution[Entities with custom names]
+At the time of writing this, BetterModel does not support entities with custom names.
+:::
 
-                bukkitCapybara.customName(Component.text("Ben the capybara"))
-                bukkitCapybara.isCustomNameVisible = true // Make the name always visible
-            }
-            ```
-        </TabItem>
-        <TabItem label="Java">
-            ```java
-            capybara -> {
-                // You can access the Bukkit representation and use the Bukkit API here.
-                // Capybara can be safely cast to CraftAnimals because CraftAnimals::new
-                // was specified as the convert function during injection registration.
-                CraftAnimals bukkitCapybara = (CraftAnimals) capybara.getBukkitEntity();
-
-                bukkitCapybara.customName(Component.text("Ben the capybara"));
-                bukkitCapybara.setCustomNameVisible(true); // Make the name always visible
-            }
-            ```
-        </TabItem>
-    </Tabs>
+:::caution[Attributes must be applied later]
+Attributes are applied to entities right before they are spawned, that means
+that any attributes applied in this consumer will probably get overwritten by the
+default entity attributes.
+:::
