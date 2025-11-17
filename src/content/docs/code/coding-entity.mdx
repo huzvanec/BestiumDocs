@@ -8,7 +8,7 @@ import { TabItem, Tabs } from '@astrojs/starlight/components';
 In this section, we'll walk through creating a custom Capybara entity, just like the one in the 
 [Bestium Example plugin](https://github.com/huzvanec/BestiumExample).
 
-:::caution[Heads up! It's all NMS here!]
+:::caution[It's all NMS here!]
 When coding custom entities with Bestium, you will almost never use Bukkit or Paper API classes.
 All your imports should come exclusively from the `net.minecraft` or `com.mojang` packages.
 
@@ -21,13 +21,13 @@ Make sure to choose the correct Minecraft internal class.
 Minecraft has a deep and confusing entity class hierarchy, and picking the correct base class can be challenging.
 
 Unlike traditional approaches that force you to extend a concrete class and work around AI structures, 
-Bestium gives you full control. You can design your entity from scratch, *almost* like Mojang does internally.
+Bestium gives you full control. You can design your entity from scratch, almost like Mojang does internally.
 
-:::note[*Almost* like Mojang internally?]
+:::note[Almost like Mojang?]
 The only major limitation is you cannot create and send any synched entity data via the network protocol.
 :::
 
-The real power of Bestium lies in choice: you’re free to select the base class that best fits your entity’s behavior. The ideal way to determine this is to:
+The real power of Bestium lies in choice: you're free to select the base class that best fits your entity's behavior. The ideal way to determine this is to:
 - Decompile a similar vanilla entity and check which class it extends.
 - Open `net.minecraft.world.entity.Entity` in your IDE and explore the class hierarchy.
 
@@ -196,7 +196,7 @@ Now, complete your entity class by implementing the required methods:
 - `getBreedOffspring()` handles breeding behavior and returns the baby entity.
 
 :::tip[Stuck or unsure?]
-If you get stuck, try decompiling a vanilla Minecraft entity that’s similar to yours.
+If you get stuck, try decompiling a vanilla Minecraft entity that's similar to yours.
 For example, for the Capybara, look at `net.minecraft.world.entity.animal.Pig` to understand how the logic works.
 
 You can also explore the [Bestium API Javadocs](/javadocs) and the open-source [Bestium Example plugin](https://github.com/huzvanec/BestiumExample) for inspiration.

@@ -3,7 +3,7 @@ import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
 import { plugin as constantsPlugin } from './src/util/remark/replace-constants';
 import { plugin as javadocPlugin } from './src/util/remark/javadoc';
-import { BESTIUM_PAPER, LATEST_BESTIUM, LATEST_USERDEV, LATEST_JAVADOC } from './src/util/versions';
+import { BESTIUM_PAPER, LATEST_BESTIUM, LATEST_USERDEV, LATEST_JAVADOC, BESTIUM_MINECRAFT } from './src/util/versions';
 
 // https://astro.build/config
 export default defineConfig({
@@ -56,8 +56,7 @@ export default defineConfig({
                 {
                     label: 'Internals',
                     items: [
-                        { label: 'How it works', slug: 'internals/how-it-works' },
-                        { label: 'The patching system', slug: 'internals/patching-system' },
+                        { label: 'Under the hood', slug: 'internals/under-the-hood' },
                     ]
                 }
             ],
@@ -72,6 +71,7 @@ export default defineConfig({
                         LATEST_BESTIUM,
                         LATEST_USERDEV,
                         BESTIUM_PAPER,
+                        BESTIUM_MINECRAFT,
                         JAVADOCS: LATEST_JAVADOC
                     }
                 }

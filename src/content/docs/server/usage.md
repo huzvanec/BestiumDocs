@@ -7,8 +7,6 @@ After installing the [Bestium Example](https://github.com/huzvanec/BestiumExampl
 
 ### Spawning a Capybara
 
-You have two options:
-
 - **Using the summon command:**  
   ```
   /summon bestium_example:capybara
@@ -21,6 +19,6 @@ You have two options:
   ```
   Requires the `bestium.command.spawnegg` permission or operator status.
 
-Once executed, a capybara should appear on your server:
+Once executed, you should see capybaras server:
 
 ![Capybara](../../../assets/capybara-spawned.png)

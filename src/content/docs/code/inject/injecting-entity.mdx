@@ -130,9 +130,9 @@ For example, if your entity directly extends `Animal` a good backing type might 
 You **must never** mix living and non-living entities. If you select a non-living backing entity type for your living entity (or vice versa), disconnect issues are pretty much guaranteed.
 
 ### Additional builder configuration
-Once you’ve provided the required parameters, you can continue chaining configuration methods to further customize your entity.
+Once you've provided the required parameters, you can continue chaining configuration methods to further customize your entity.
 For the full list of options, see the [EntityInjection.Builder Javadoc](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder).  
-Below is a selection of the most important configuration methods you’ll likely want to use:
+Below is a selection of the most important configuration methods you'll likely want to use:
 
 #### [`setDefaultAttributes(AttributeSupplier.Builder)`](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#setDefaultAttributes(net.minecraft.world.entity.ai.attributes.AttributeSupplier))
 **You must call this for living entities!**
@@ -224,7 +224,7 @@ For example, here's how you might define localized names for a capybara:
 You can also set multiple display names at once using
 [`setDisplayNames(Map<Locale, Component>)`](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#setDisplayNames(java.util.Map)).
 
-If you don’t care about localization, you can use the shorthand
+If you don't care about localization, you can use the shorthand
 [`setDisplayName(Component)`](jd::cz.jeme.bestium.api.inject.EntityInjection.Builder#setDisplayName(net.kyori.adventure.text.Component)) which sets the name for the default `Locale.US`.
 
 If no display name is set, the entity will appear using its translation key
