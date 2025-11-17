@@ -19,6 +19,7 @@ After installing the [Bestium Example](https://github.com/huzvanec/BestiumExampl
   ```
   Requires the `bestium.command.spawnegg` permission or operator status.
 
-Once executed, you should see capybaras server:
+- **Finding a Capybara in the wild:**  
+  Capybaras spawn naturally in the [River](https://minecraft.wiki/w/River) and [Frozen River](https://minecraft.wiki/w/Frozen_River) biomes.
 
 ![Capybara](../../../assets/capybara-spawned.png)

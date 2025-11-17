@@ -32,23 +32,23 @@ export default defineConfig({
                 {
                     label: 'Bestium API',
                     items: [
-                        { label: 'Introduction to Bestium API', slug: 'code/introduction' },
-                        { label: 'Project setup', slug: 'code/project-setup' },
-                        { label: 'Coding an entity', slug: 'code/coding-entity' },
+                        { label: 'Introduction to Bestium API', slug: 'api/introduction' },
+                        { label: 'Project setup', slug: 'api/project-setup' },
+                        { label: 'Coding an entity', slug: 'api/coding-entity' },
                         {
                             label: 'Entity injection', items: [
-                                { label: 'Injecting an entity', slug: 'code/inject/injecting-entity' },
-                                { label: 'Variants API', slug: 'code/inject/variants-api' },
-                                { label: 'Biome API', slug: 'code/inject/biome-api' },
-                                { label: 'Capybara injection example', slug: 'code/inject/example' },
+                                { label: 'Injecting an entity', slug: 'api/inject/injecting-entity' },
+                                { label: 'Variants API', slug: 'api/inject/variants-api' },
+                                { label: 'Biome API', slug: 'api/inject/biome-api' },
+                                { label: 'Capybara injection example', slug: 'api/inject/example' },
                             ]
                         },
-                        { label: 'Spawning an entity', slug: 'code/spawning-entity' },
-                        { label: 'Interacting with an entity', slug: 'code/interacting-with-entity' },
+                        { label: 'Spawning an entity', slug: 'api/spawning-entity' },
+                        { label: 'Interacting with an entity', slug: 'api/interacting-with-entity' },
                         {
                             label: 'Lifehacks', items: [
-                                { label: 'Introduction to Lifehacks', slug: 'code/lifehacks/introduction' },
-                                { label: 'Mob aging with BetterModel', slug: 'code/lifehacks/mob-aging' },
+                                { label: 'Introduction to Lifehacks', slug: 'api/lifehacks/introduction' },
+                                { label: 'Mob aging with BetterModel', slug: 'api/lifehacks/mob-aging' },
                             ]
                         }
                     ]
