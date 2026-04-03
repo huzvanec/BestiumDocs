@@ -11,13 +11,13 @@ jobs:
     if: github.ref == 'refs/heads/prod'
     permissions:
       contents: write
-    
+
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
-        node-version: [ 20 ]
-    
+        node-version: [20]
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v6
@@ -30,7 +30,7 @@ jobs:
         with:
           cache-dependency-path: ./pnpm-lock.yaml
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install
@@ -42,5 +42,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: './dist'
-          cname: 'docs.bestium.jeme.cz'
+          publish_dir: "./dist"
+          cname: "docs.bestium.jeme.cz"

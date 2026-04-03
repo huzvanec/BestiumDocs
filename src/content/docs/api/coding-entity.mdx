@@ -3,9 +3,9 @@ title: Coding an entity
 description: Learn how to code an entity with Bestium API.
 ---
 
-import { TabItem, Tabs } from '@astrojs/starlight/components';
+import { TabItem, Tabs } from "@astrojs/starlight/components";
 
-In this section, we'll walk through creating a custom Capybara entity, just like the one in the 
+In this section, we'll walk through creating a custom Capybara entity, just like the one in the
 [Bestium Example plugin](https://github.com/huzvanec/BestiumExample).
 
 :::caution[It's all NMS here!]
@@ -20,7 +20,7 @@ Make sure to choose the correct Minecraft internal class.
 
 Minecraft has a deep and confusing entity class hierarchy, and picking the correct base class can be challenging.
 
-Unlike traditional approaches that force you to extend a concrete class and work around AI structures, 
+Unlike traditional approaches that force you to extend a concrete class and work around AI structures,
 Bestium gives you full control. You can design your entity from scratch, almost like Mojang does internally.
 
 :::note[Almost like Mojang?]
@@ -28,11 +28,13 @@ The only major limitation is you cannot create and send any synched entity data 
 :::
 
 The real power of Bestium lies in choice: you're free to select the base class that best fits your entity's behavior. The ideal way to determine this is to:
+
 - Decompile a similar vanilla entity and check which class it extends.
 - Open `net.minecraft.world.entity.Entity` in your IDE and explore the class hierarchy.
 
 Here are some frequently used abstract or base classes you might consider extending:
-- `Animal` for passive creatures like cows, axolotls or __capybaras__
+
+- `Animal` for passive creatures like cows, axolotls or **capybaras**
 - `Monster` for hostile mobs like zombies or skeletons
 - `AbstractVillager` for villagers and their variants
 - `AbstractGolem` for golems like iron golems or snow golems
@@ -43,6 +45,7 @@ Here are some frequently used abstract or base classes you might consider extend
 ## Create the entity class
 
 Your class must
+
 - Extend the appropriate base class
 - Implement all abstract methods
 - Provide a **public** super-matching constructor
@@ -103,14 +106,17 @@ Your initial code should look something like this:
         }
         ```
     </TabItem>
+
 </Tabs>
 
 ## Add default attributes
+
 If your entity extends `LivingEntity` it needs a set of default attributes, like health, speed, or attack damage, to function properly in the game.
 These are defined in a static method, typically named `createAttributes()`. Some attributes are required (like max health and movement speed),
 you will usually find out, because the server will crash 🙂.
 
 Use the appropriate base method provided by your parent for your entity type:
+
 - `createAnimalAttributes()` for animals
 - `createMonsterAttributes()` for monsters
 
@@ -138,24 +144,24 @@ etc.
 </Tabs>
 
 ## Add goals
+
 Goals power your entity's AI, how it moves, reacts, or interacts with the world.
 To add goals, override the `registerGoals()` method in your custom entity. Use:
+
 <Tabs syncKey="lang">
-    <TabItem label="Kotlin">
-        ```kotlin
-        goalSelector.addGoal(PRIORITY, GOAL)
-        ```
-    </TabItem>
-    <TabItem label="Java">
-        ```java
-        goalSelector.addGoal(PRIORITY, GOAL);
-        ```
-    </TabItem>
+  <TabItem label="Kotlin">
+    ```kotlin goalSelector.addGoal(PRIORITY, GOAL) ```
+  </TabItem>
+  <TabItem label="Java">
+    ```java goalSelector.addGoal(PRIORITY, GOAL); ```
+  </TabItem>
 </Tabs>
-- `PRIORITY`: The importance of this goal over others, lower numbers run first
-- `GOAL`: An instance of an existing goal (check the `net.minecraft.world.entity.ai.goal` package) or your own custom goal 
+- `PRIORITY`: The importance of this goal over others, lower numbers run first -
+`GOAL`: An instance of an existing goal (check the
+`net.minecraft.world.entity.ai.goal` package) or your own custom goal
 
 Here's an example for our capybara:
+
 <Tabs syncKey="lang">
     <TabItem label="Kotlin">
         ```kotlin title="Capybara.kt"
@@ -203,6 +209,7 @@ You can also explore the [Bestium API Javadocs](/javadocs) and the open-source [
 :::
 
 Your finished class will look something like this:
+
 <Tabs syncKey="lang">
     <TabItem label="Kotlin">
         ```kotlin title="Capybara.kt"
@@ -302,4 +309,5 @@ Your finished class will look something like this:
         }
         ```
     </TabItem>
+
 </Tabs>

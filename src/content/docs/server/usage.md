@@ -7,16 +7,20 @@ After installing the [Bestium Example](https://github.com/huzvanec/BestiumExampl
 
 ### Spawning a Capybara
 
-- **Using the summon command:**  
+- **Using the summon command:**
+
   ```
   /summon bestium_example:capybara
   ```
+
   Requires the `bestium.command.summon` permission or operator status.
 
-- **Giving yourself a spawn egg:**  
+- **Giving yourself a spawn egg:**
+
   ```
   /spawnegg @s bestium_example:capybara
   ```
+
   Requires the `bestium.command.spawnegg` permission or operator status.
 
 - **Finding a Capybara in the wild:**  

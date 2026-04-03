@@ -3,40 +3,34 @@ title: Interacting with an entity
 description: Learn how to interact with spawned entities using the Bestium API.
 ---
 
-import { TabItem, Tabs } from '@astrojs/starlight/components';
+import { TabItem, Tabs } from "@astrojs/starlight/components";
 
 ## Checking if an entity is an injected entity
 
 To check if an entity is an injected Bestium entity, use:
 
 <Tabs syncKey="lang">
-    <TabItem label="Kotlin">
-        ```kotlin
-        Bestium.getEntityManager().isInjected(entity)
-        ```
-    </TabItem>
-    <TabItem label="Java">
-        ```java
-        Bestium.getEntityManager().isInjected(entity);
-        ```
-    </TabItem>
+  <TabItem label="Kotlin">
+    ```kotlin Bestium.getEntityManager().isInjected(entity) ```
+  </TabItem>
+  <TabItem label="Java">
+    ```java Bestium.getEntityManager().isInjected(entity); ```
+  </TabItem>
 </Tabs>
 
 ## Getting the entity injection
 
-To get the `EntityInjection` of an injected entity, use:  
+To get the `EntityInjection` of an injected entity, use:
 
 <Tabs syncKey="lang">
-    <TabItem label="Kotlin">
-        ```kotlin
-        val injection = Bestium.getEntityManager().getInjection(entity)
-        ```
-    </TabItem>
-    <TabItem label="Java">
-        ```java
-        EntityInjection injection = Bestium.getEntityManager().getInjection(entity);
-        ```
-    </TabItem>
+  <TabItem label="Kotlin">
+    ```kotlin val injection = Bestium.getEntityManager().getInjection(entity)
+    ```
+  </TabItem>
+  <TabItem label="Java">
+    ```java EntityInjection injection =
+    Bestium.getEntityManager().getInjection(entity); ```
+  </TabItem>
 </Tabs>
 
 This returns `null` if the entity is not an injected Bestium entity.
@@ -44,19 +38,18 @@ This returns `null` if the entity is not an injected Bestium entity.
 Alternatively, you can use the `requireInjection` method, which throws an exception if the entity is not an injected Bestium entity:
 
 <Tabs syncKey="lang">
-    <TabItem label="Kotlin">
-        ```kotlin
-        val injection = Bestium.getEntityManager().requireInjection(entity)
-        ```
-    </TabItem>
-    <TabItem label="Java">
-        ```java
-        EntityInjection injection = Bestium.getEntityManager().requireInjection(entity);
-        ```
-    </TabItem>
+  <TabItem label="Kotlin">
+    ```kotlin val injection =
+    Bestium.getEntityManager().requireInjection(entity) ```
+  </TabItem>
+  <TabItem label="Java">
+    ```java EntityInjection injection =
+    Bestium.getEntityManager().requireInjection(entity); ```
+  </TabItem>
 </Tabs>
 
 ## Getting the real entity type
+
 To get the entity's real type, obtain the Minecraft NMS entity and call `getType()`.
 
 <Tabs syncKey="lang">
@@ -92,4 +85,4 @@ To get the entity's backing type, use:
 </Tabs>
 
 This method is more efficient than first obtaining an `EntityInjection` and then calling \
-[`.getBackingType()`](jd::cz.jeme.bestium.api.inject.EntityInjection#getBackingType()) on it.
+[`.getBackingType()`](<jd::cz.jeme.bestium.api.inject.EntityInjection#getBackingType()>) on it.

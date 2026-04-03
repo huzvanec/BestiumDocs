@@ -1,6 +1,6 @@
 ## Technical
 
-- [x] Constants replacement 
+- [x] Constants replacement
 - [x] Auto mc version in project setup
 - [x] Split docs from javadocs
 - [x] Javadoc replacement
@@ -12,7 +12,7 @@
 - [x] Mob aging
 - [x] Type customizers
 - [x] Mob variants
-- [x] Natural mob spawning in biomes 
+- [x] Natural mob spawning in biomes
 - [x] i18n (entity.my_plugin.capybara)
 - [ ] Config
 - [ ] Advancements

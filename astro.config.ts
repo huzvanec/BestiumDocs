@@ -1,85 +1,111 @@
 // @ts-check
-import starlight from '@astrojs/starlight';
-import { defineConfig } from 'astro/config';
-import { plugin as constantsPlugin } from './src/util/remark/replace-constants';
-import { plugin as javadocPlugin } from './src/util/remark/javadoc';
-import { BESTIUM_PAPER, LATEST_BESTIUM, LATEST_USERDEV, LATEST_JAVADOC, BESTIUM_MINECRAFT } from './src/util/versions';
+import starlight from "@astrojs/starlight";
+import { defineConfig } from "astro/config";
+import { plugin as constantsPlugin } from "./src/util/remark/replace-constants";
+import { plugin as javadocPlugin } from "./src/util/remark/javadoc";
+import {
+  BESTIUM_PAPER,
+  LATEST_BESTIUM,
+  LATEST_USERDEV,
+  LATEST_JAVADOC,
+  BESTIUM_MINECRAFT,
+} from "./src/util/versions";
 
 // https://astro.build/config
 export default defineConfig({
-    integrations: [
-        starlight({
-            title: 'Bestium Docs',
-            social: [
-                { icon: 'github', label: 'GitHub', href: 'https://github.com/huzvanec/Bestium' },
-                { icon: 'seti:java', label: 'Javadocs', href: 'https://jd.bestium.jeme.cz' }
-            ],
-            favicon: '/favicon.ico',
-            sidebar: [
+  integrations: [
+    starlight({
+      title: "Bestium Docs",
+      social: [
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/huzvanec/Bestium",
+        },
+        {
+          icon: "seti:java",
+          label: "Javadocs",
+          href: "https://jd.bestium.jeme.cz",
+        },
+      ],
+      favicon: "/favicon.ico",
+      sidebar: [
+        {
+          label: "Start Here",
+          items: [{ label: "About Bestium", slug: "start/about-bestium" }],
+        },
+        {
+          label: "Server Setup",
+          items: [
+            { label: "Installation", slug: "server/installation" },
+            { label: "Usage", slug: "server/usage" },
+          ],
+        },
+        {
+          label: "Bestium API",
+          items: [
+            { label: "Introduction to Bestium API", slug: "api/introduction" },
+            { label: "Project setup", slug: "api/project-setup" },
+            { label: "Coding an entity", slug: "api/coding-entity" },
+            {
+              label: "Entity injection",
+              items: [
                 {
-                    label: 'Start Here',
-                    items: [
-                        { label: 'About Bestium', slug: 'start/about-bestium' },
-                    ]
+                  label: "Injecting an entity",
+                  slug: "api/inject/injecting-entity",
+                },
+                { label: "Variants API", slug: "api/inject/variants-api" },
+                { label: "Biome API", slug: "api/inject/biome-api" },
+                {
+                  label: "Capybara injection example",
+                  slug: "api/inject/example",
+                },
+              ],
+            },
+            { label: "Spawning an entity", slug: "api/spawning-entity" },
+            {
+              label: "Interacting with an entity",
+              slug: "api/interacting-with-entity",
+            },
+            {
+              label: "Lifehacks",
+              items: [
+                {
+                  label: "Introduction to Lifehacks",
+                  slug: "api/lifehacks/introduction",
                 },
                 {
-                    label: 'Server Setup',
-                    items: [
-                        { label: 'Installation', slug: 'server/installation' },
-                        { label: 'Usage', slug: 'server/usage' }
-                    ]
+                  label: "Mob aging with BetterModel",
+                  slug: "api/lifehacks/mob-aging",
                 },
-                {
-                    label: 'Bestium API',
-                    items: [
-                        { label: 'Introduction to Bestium API', slug: 'api/introduction' },
-                        { label: 'Project setup', slug: 'api/project-setup' },
-                        { label: 'Coding an entity', slug: 'api/coding-entity' },
-                        {
-                            label: 'Entity injection', items: [
-                                { label: 'Injecting an entity', slug: 'api/inject/injecting-entity' },
-                                { label: 'Variants API', slug: 'api/inject/variants-api' },
-                                { label: 'Biome API', slug: 'api/inject/biome-api' },
-                                { label: 'Capybara injection example', slug: 'api/inject/example' },
-                            ]
-                        },
-                        { label: 'Spawning an entity', slug: 'api/spawning-entity' },
-                        { label: 'Interacting with an entity', slug: 'api/interacting-with-entity' },
-                        {
-                            label: 'Lifehacks', items: [
-                                { label: 'Introduction to Lifehacks', slug: 'api/lifehacks/introduction' },
-                                { label: 'Mob aging with BetterModel', slug: 'api/lifehacks/mob-aging' },
-                            ]
-                        }
-                    ]
-                },
-                {
-                    label: 'Internals',
-                    items: [
-                        { label: 'Under the hood', slug: 'internals/under-the-hood' },
-                    ]
-                }
-            ],
-        }),
+              ],
+            },
+          ],
+        },
+        {
+          label: "Internals",
+          items: [
+            { label: "Under the hood", slug: "internals/under-the-hood" },
+          ],
+        },
+      ],
+    }),
+  ],
+  markdown: {
+    remarkPlugins: [
+      [
+        constantsPlugin,
+        {
+          constants: {
+            LATEST_BESTIUM,
+            LATEST_USERDEV,
+            BESTIUM_PAPER,
+            BESTIUM_MINECRAFT,
+            JAVADOCS: LATEST_JAVADOC,
+          },
+        },
+      ],
+      [javadocPlugin, {}],
     ],
-    markdown: {
-        remarkPlugins: [
-            [
-                constantsPlugin,
-                {
-                    constants: {
-                        LATEST_BESTIUM,
-                        LATEST_USERDEV,
-                        BESTIUM_PAPER,
-                        BESTIUM_MINECRAFT,
-                        JAVADOCS: LATEST_JAVADOC
-                    }
-                }
-            ],
-            [
-                javadocPlugin,
-                {}
-            ]
-        ]
-    }
+  },
 });
