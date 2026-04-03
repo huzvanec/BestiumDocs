@@ -3,7 +3,7 @@ title: Project Setup
 description: Learn how to setup your project environment with Bestium.
 ---
 
-import { TabItem, Tabs } from "@astrojs/starlight/components";
+import { TabItem, Tabs } from '@astrojs/starlight/components';
 
 To use Bestium, you need to start with a working [Paper plugin setup](https://docs.papermc.io/paper/dev/project-setup/).
 Your build must use either **Gradle Kotlin DSL** or **Gradle Groovy DSL**. Maven cannot be used, because paperweight-userdev
@@ -12,12 +12,10 @@ does not support Maven.
 ## Add dependencies
 
 To use Bestium in your plugin project, you'll need two dependencies:
-
 - [paperweight-userdev](https://docs.papermc.io/paper/dev/userdev/) for access to Minecraft internals (also known as NMS).
 - [Bestium API](https://central.sonatype.com/artifact/cz.jeme/bestium) for using Bestium's entity injection tools.
 
 Your Gradle build configuration should look something like this:
-
 <Tabs syncKey="lang">
     <TabItem label="Kotlin">
         <Tabs syncKey="buildLang">
@@ -99,7 +97,6 @@ Your Gradle build configuration should look something like this:
             </TabItem>
         </Tabs>
     </TabItem>
-
 </Tabs>
 
 ## Verify your setup
@@ -107,12 +104,16 @@ Your Gradle build configuration should look something like this:
 Once your build is synced, you should be able to import main Bestium class:
 
 <Tabs syncKey="lang">
-  <TabItem label="Kotlin">
-    ```kotlin import cz.jeme.bestium.api.Bestium ```
-  </TabItem>
-  <TabItem label="Java">
-    ```java import cz.jeme.bestium.api.Bestium; ```
-  </TabItem>
+    <TabItem label="Kotlin">
+        ```kotlin
+        import cz.jeme.bestium.api.Bestium
+        ```
+    </TabItem>
+    <TabItem label="Java">
+        ```java
+        import cz.jeme.bestium.api.Bestium;
+        ```
+    </TabItem>
 </Tabs>
 
 ## Converting to a Paper plugin
@@ -129,18 +130,15 @@ which let you run code early in the server initialization process.
 Follow [this guide](https://docs.papermc.io/paper/dev/getting-started/paper-plugins/) to migrate from Bukkit to Paper plugin format.
 
 ## Creating a Bootstrapper
-
 Bootstrappers allow you to run code very early in the Minecraft server's startup sequence.
 This is essential for registering custom entities with Bestium.
 
 To use a bootstrapper:
-
-1.  Implement the `PluginBootstrap` interface:
-
+1. Implement the `PluginBootstrap` interface:
     <Tabs syncKey="lang">
-    <TabItem label="Kotlin">
-        ```kotlin title="MyPluginBootstrapper.kt"
-        package com.example.myplugin
+        <TabItem label="Kotlin">
+            ```kotlin title="MyPluginBootstrapper.kt"
+            package com.example.myplugin
 
             import io.papermc.paper.plugin.bootstrap.BootstrapContext
             import io.papermc.paper.plugin.bootstrap.PluginBootstrap
@@ -169,13 +167,11 @@ To use a bootstrapper:
             }
             ```
         </TabItem>
-
     </Tabs>
-
-2.  Register your bootstrapper class in `paper-plugin.yml`:
+2. Register your bootstrapper class in `paper-plugin.yml`:
     ```yml title="paper-plugin.yml"
-    bootstrapper: com.example.myplugin.MyPluginBootstrapper
-    ```
+   bootstrapper: com.example.myplugin.MyPluginBootstrapper
+   ```
 
 ## Adding Bestium plugin dependency
 

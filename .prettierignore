@@ -8,3 +8,7 @@ bun.lockb
 # Miscellaneous
 /public/
 .astro/
+
+# Docs
+src/**/*.md
+src/**/*.mdx

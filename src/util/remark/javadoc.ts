@@ -2,7 +2,7 @@ import type { RemarkPlugin } from "@astrojs/markdown-remark";
 import { visit } from "unist-util-visit";
 import { LATEST_JAVADOC } from "../versions";
 
-export const plugin: RemarkPlugin = (_options) => {
+export const plugin: RemarkPlugin = (options) => {
   return (tree) => {
     visit(tree, "link", (node) => {
       const match = node.url.match(/^jd::([^\s]+)$/);
